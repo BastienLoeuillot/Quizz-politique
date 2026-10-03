@@ -12,7 +12,16 @@
 </head>
 
 <body>
-
+    <div class="topbar-global" id="globalTopbar">
+    <div class="grp">
+        <div class="lbl">Série</div>
+        <div class="val" id="dailyStreakVal">🔥 1 j</div>
+    </div>
+    <div class="grp right">
+        <div class="lbl">Score du jour</div>
+        <div class="val" id="dailyScoreVal">0 pts</div>
+    </div>
+</div>
     <div class="cab" id="cab">
 
         <!-- INTRO -->
@@ -20,17 +29,17 @@
             <div class="app-title">Novelty</div>
             <p class="app-subtitle">Pour une fois que la politique<br>
                 demande des réponses claires.</p>
-            <button class="btn-secondary" id="btnStartQuiz">Quiz</button>
+            <button class="btn" id="btnStartQuiz">Quiz</button>
             <div style="height:10px;"></div>
-            <button class="btn-secondary" id="btnStartCitations">Citations</button>
+            <button class="btn" id="btnStartCitations">Citations</button>
             <div style="height:10px;"></div>
-            <button class="btn-secondary" id="btnGoLevel">Qui est-ce ?</button>
+            <button class="btn" id="btnGoLevel">Qui est-ce ?</button>
+            <div style="height:10px;"></div>
+            <button class="btn" id="btnStartPong">Pol-Pong</button>   <!-- AJOUT -->
+            <div style="height:10px;"></div>
             <p></p>
-            <p><i>10 questions tirées au hasard.<br>
-                    30 secondes par question.<br>
-                    50 points max — plus tu réponds vite juste, plus tu marques.</i></p>
             <div class="bestscore" id="introBest" style="margin-top:20px;">
-                Meilleur score — Quiz : <span id="introBestQuiz">0</span> · Citations : <span id="introBestCitations">0</span>
+                Meilleur score — Quiz : <span id="introBestQuiz">0</span> · Citations : <span id="introBestCitations">0</span> · Qui est-ce ? : <span id="introBestquiestce">0</span>
             </div>
         </div>
 
@@ -43,7 +52,7 @@
             <button class="level-btn" id="btnLevelDifficile">Difficile</button>
             <button class="level-btn level-btn-presidentielle" id="btnLevelPresidentielle">Présidentielle</button>
             <div style="height:6px;"></div>
-            <button class="btn btn-secondary" id="btnLevelBack">Retour</button>
+            <button class="btn-again btn" id="btnLevelBack">Retour</button>
         </div>
 
         <!-- GAME -->
@@ -95,14 +104,130 @@
             <div class="bigscore" id="finalScore">0</div>
             <div class="verdict" id="finalVerdict"></div>
             <div class="bestscore">Meilleur score : <span id="finalBest">0</span></div>
-            <button class="btn" id="btnReplay">Rejouer</button>
+            <button class="btn-again" id="btnReplay">Rejouer</button>
             <div style="height:10px;"></div>
-            <button class="btn btn-secondary" id="btnHome">Écran principal</button>
+            <button class="btn btn" id="btnHome">Écran principal</button>
         </div>
 
     </div>
 
-    <script src="game.js"></script>
+    <div id="pong" class="hidden">
+<div class="app">
+  <!-- SÉLECTION -->
+  <section id="selectionScreen" class="screen">
+    <div class="app-title">POL-PONG</div>
+    <p class="app-subtitle">La campagne présidentielle vous ennuie ? <br> Jouez-la au pong</p>
+
+    <div class="selection-label">Mode de jeu</div>
+    <div class="mode-toggle">
+      <button id="quickModeButton" class="active" onclick="PongApp.setMode('quick')" aria-label="Partie Rapide">PARTIE RAPIDE</button>
+      <button id="campaignModeButton" onclick="PongApp.setMode('campaign')" aria-label="Campagne Présidentielle">CAMPAGNE PRÉSIDENTIELLE</button>
+    </div>
+
+    <div id="campaignInfo" class="info-box hidden">
+      Vous vous présentez à la présidentielle. Choisissez votre camp et amenez votre candidat jusqu'à la victoire finale !
+    </div>
+
+    <div class="selection-label">Votre camp</div>
+    <div class="select-box">
+      <select id="campSelect" onchange="PongApp.setCamp(this.value)" aria-label="Sélectionner un camp"></select>
+      <div class="select-arrow" aria-hidden="true">▼</div>
+    </div>
+
+    <div class="selection-label">Votre candidat</div>
+    <div class="select-box">
+      <select id="playerSelect" onchange="PongApp.updateCandidatePreview()" aria-label="Sélectionner un candidat"></select>
+      <div class="select-arrow" aria-hidden="true">▼</div>
+    </div>
+
+    <div class="candidate-preview-row" id="candidatePreviewRow"></div>
+
+    <div id="difficultyBlock">
+      <div class="selection-label">Difficulté</div>
+      <div class="difficulty">
+        <button id="easyButton" class="active" onclick="PongApp.setDifficulty('easy')" aria-label="Difficulté Facile">FACILE</button>
+        <button id="normalButton" onclick="PongApp.setDifficulty('normal')" aria-label="Difficulté Normal">NORMAL</button>
+        <button id="hardButton" onclick="PongApp.setDifficulty('hard')" aria-label="Difficulté Difficile">DIFFICILE</button>
+      </div>
+    </div>
+
+    <button class="btn-again" id="startButton" onclick="PongApp.startGame()" aria-label="Lancer la partie">JOUER</button>
+
+    <button class="level-btn" onclick="PongApp.exit()" aria-label="Retour à l'accueil">Accueil</button>
+
+    <div class="stats-title">Vos statistiques</div>
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-label">Parties</span>
+        <span class="stat-value" id="statGames">0</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Taux de victoire</span>
+        <span class="stat-value" id="statWinRate">—</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Candidat préféré</span>
+        <span class="stat-value" id="statFavorite">—</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- JEU -->
+  <section id="gameScreen" class="hidden">
+    <div class="game-wrapper">
+      <canvas id="gameCanvas"></canvas>
+      <button class="quit" onclick="PongApp.quitGame()" aria-label="Quitter la partie">×</button>
+      <div class="game-ui">
+        <div class="top-info">
+          <div class="percentage" id="opponentPercentage">—</div>
+        </div>
+        <div class="game-score">
+          <span id="scoreOpponent">0</span>
+          <span class="score-separator">—</span>
+          <span id="scorePlayer">0</span>
+        </div>
+        <div class="bottom-info">
+          <div id="gameMessage" class="message" aria-live="polite"></div>
+          <div class="powerup-gauge-container">
+            <div id="powerupGauge" class="powerup-gauge-fill"></div>
+          </div>
+          <div class="percentage" id="playerPercentage">—</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRANSITION CAMPAGNE -->
+  <section id="campaignTransitionScreen" class="screen hidden">
+    <h1 id="campaignTransitionTitle">Résultats</h1>
+    <div style="margin-top:-8px;font-size:14px;color:var(--ink-soft);line-height:1.5;" id="campaignTransitionIntro"></div>
+    <div style="margin-top:22px;" id="campaignTransitionList"></div>
+    <button class="btn-again" id="campaignTransitionButton" onclick="PongApp.continueCampaignTransition()" aria-label="Continuer la campagne">CONTINUER</button>
+    <button class="level-btn" onclick="PongApp.showSelection()" aria-label="Retour au menu principal">MENU</button>
+  </section>
+
+  <!-- RÉSULTAT -->
+  <section id="resultScreen" class="screen result hidden">
+    <div class="tag" id="resultStageTitle">Partie terminée</div>
+    <div class="winner" id="winnerName">—</div>
+    <div class="result-score" id="pongFinalScore">—</div>
+    <div class="result-percentages">
+      <div class="result-row">
+        <span id="resultPlayerName">—</span>
+        <strong id="resultPlayerPercent">—</strong>
+      </div>
+      <div class="result-row">
+        <span id="resultOpponentName">—</span>
+        <strong id="resultOpponentPercent">—</strong>
+      </div>
+    </div>
+    <div class="result-buttons" id="resultButtons"></div>
+  </section>
+</div>
+</div>
+
+
+    <script type="module" src="game.js"></script>
 </body>
 
 </html>
