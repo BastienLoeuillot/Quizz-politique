@@ -4,7 +4,6 @@
     --font-title: 'Syne', sans-serif;
 
     --bg: #fff;
-    --bg2: #fff;
     --card: #ffffff;
     --ink: #111;
     --ink-soft: #777;
@@ -34,26 +33,51 @@ body {
 }
 
 body {
-    background: var(--bg2);
+    background: var(--bg);
     color: var(--ink);
     font-family: var(--font-text);
     -webkit-font-smoothing: antialiased;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     min-height: 100vh;
     padding: 24px 16px;
     line-height: 1.45;
 }
 
-.cab {
-    width: 100%;
-    max-width: 440px;
-    background: var(--card);
-    border: 2px solid var(--ink);
-    border-radius: 14px;
-    box-shadow: var(--shadow);
-    overflow: hidden;
+.topbar-global {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px 12px;
+    border-radius: 12px 12px 0 0;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;          /* Ajuste selon le rendu souhaité */
+    max-width: 480px;    /* S'aligne souvent sur la largeur du conteneur mobile */
+    z-index: 1000;
+}
+
+.topbar-global .lbl {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--ink-soft);
+    font-weight: 700;
+}
+
+.topbar-global .val {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+}
+
+.topbar-global .grp.right {
+    text-align: right;
 }
 
 .topbar {
@@ -294,7 +318,7 @@ body {
     padding: 0 24px 24px;
 }
 
-.btn {
+.btn-again {
     width: 100%;
     border: 0;
     background: var(--ink);
@@ -308,15 +332,15 @@ body {
     transition: opacity .15s, transform .08s;
 }
 
-.btn:hover {
+.btn-again:hover {
     opacity: .82;
 }
 
-.btn:active {
+.btn-again:active {
     transform: scale(0.98);
 }
 
-.btn-secondary {
+.btn{
     width: 100%;
     border: 0;
     background: var(--ink);
@@ -330,13 +354,13 @@ body {
     transition: opacity .15s, transform .08s;
 }
 
-.btn-secondary:hover {
+.btn:hover{
     background: #f5f5f5;
     opacity: 1;
     color: var(--ink)
 }
 
-.screen {
+.screen{
     padding: 44px 28px;
     text-align: center;
 }
@@ -514,4 +538,407 @@ body {
 
 .points-pop.combo {
     color: var(--ko);
+}
+
+/* =====================================================================
+   POL-PONG — uniquement ce qui est propre au jeu.
+   Le reste réutilise les classes du quiz : .screen, .app-title,
+   .app-subtitle, .tag, .btn-again, .level-btn, .hidden, variables --ink,
+   --bg, --ink-soft, --line, --line-light.
+   ===================================================================== */
+#pong {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;            /* au-dessus de la topbar globale (1000) */
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    background: var(--bg);
+}
+
+#pong .app {
+    width: 100%;
+    max-width: 460px;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Écrans du jeu : on garde le .screen du quiz (centré), sauf le formulaire */
+#pong #selectionScreen { text-align: left; }
+#pong #selectionScreen .app-title,
+#pong #selectionScreen .app-subtitle { text-align: center; }
+
+#pong .btn-again { margin-bottom: 10px; }
+#pong #startButton { margin-top: 24px; }
+#pong .result .tag { margin-top: 50px; }
+
+#pong .avatar-circle {
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-sizing: border-box;
+}
+
+#pong .avatar-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+#pong .avatar-initials {
+    font-family: var(--font-display);
+    color: #fff;
+    font-weight: 800;
+    text-align: center;
+    line-height: 1;
+    user-select: none;
+}
+
+#pong .selection-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    color: var(--ink-soft);
+    margin-bottom: 9px;
+}
+
+#pong .select-box {
+    position: relative;
+    margin-bottom: 22px;
+    width: 100%;
+}
+
+#pong select {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--ink);
+    border-radius: 8px;
+    padding: 16px 42px 16px 15px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+    cursor: pointer;
+    font-family: inherit;
+}
+
+#pong .select-arrow {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-size: 14px;
+    color: var(--ink);
+}
+
+#pong .difficulty {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 7px;
+    margin-bottom: 8px;
+}
+
+#pong .difficulty button {
+    border: 1px solid var(--line);
+    background: var(--bg);
+    border-radius: 7px;
+    padding: 12px 5px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+#pong .difficulty button.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--bg);
+}
+
+#pong .mode-toggle {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 7px;
+    margin-bottom: 22px;
+}
+
+#pong .mode-toggle button {
+    border: 1px solid var(--line);
+    background: var(--bg);
+    border-radius: 7px;
+    padding: 14px 6px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 11.5px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+#pong .mode-toggle button.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--bg);
+}
+
+#pong .info-box {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    background: #f5f5f5;
+    border-radius: 8px;
+    padding: 14px;
+    margin: -6px 0 24px;
+}
+
+#pong .candidate-preview-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: -8px 0 22px;
+}
+
+#pong .candidate-preview-name {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 800;
+}
+
+#pong .candidate-preview-camp {
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 2px;
+}
+
+#pong .stats-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    margin-top: 24px;
+    margin-bottom: 12px;
+}
+
+#pong .stats { border-top: 1px solid var(--ink);
+}
+
+#pong .stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 54px;
+    border-bottom: 1px solid var(--line);
+    font-size: 14px;
+}
+
+#pong .stat-label { color: var(--ink-soft);
+}
+
+#pong .stat-value { font-weight: 700; text-align: right; max-width: 60%;
+}
+
+#pong #gameScreen {
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--bg);
+}
+
+#pong .game-wrapper {
+    width: min(100vw, 460px);
+    height: min(177.78vw, 820px);
+    max-height: 100vh;
+    position: relative;
+    overflow: hidden;
+    background: var(--bg);
+    touch-action: none;
+}
+
+#pong canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    touch-action: none;
+}
+
+#pong .game-ui {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+#pong .top-info {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
+#pong .bottom-info {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 0 16px;
+}
+
+#pong .percentage {
+    font-size: 12px;
+    color: var(--ink-soft);
+    font-weight: 600;
+}
+
+#pong .message {
+    font-size: 11.5px;
+    font-family: var(--font-text);
+    text-align: center;
+    opacity: 0;
+    transition: opacity .2s;
+    pointer-events: none;
+    line-height: 1.35;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+#pong .message.show { opacity: 1;
+}
+
+#pong .message .msg-category {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+#pong .message .msg-phrase {
+    font-style: italic;
+    color: var(--ink);
+    margin-bottom: 2px;
+}
+
+#pong .message .msg-rule {
+    font-weight: 700;
+    color: var(--ink-soft);
+}
+
+#pong .powerup-gauge-container {
+    width: 80%;
+    height: 4px;
+    background: var(--line-light);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+#pong .powerup-gauge-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--ink);
+    transition: width 0.1s linear;
+}
+
+#pong .game-score {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    font-family: var(--font-display);
+    font-weight: 800;
+    color: var(--ink);
+    z-index: 4;
+}
+
+#pong .game-score span { display: block; line-height: 1;
+}
+
+#pong .score-separator { font-size: 10px; color: var(--ink-soft);
+}
+
+#pong .quit {
+    position: absolute;
+    top: 17px;
+    right: 17px;
+    border: 0;
+    background: transparent;
+    font-size: 18px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    z-index: 10;
+    pointer-events: auto;
+}
+
+#pong .campaign-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 8px;
+    border-bottom: 1px solid var(--line-light);
+    border-radius: 8px;
+}
+
+#pong .campaign-row.highlight { background: #f5f5f5;
+}
+
+#pong .campaign-row-name { font-family: var(--font-display); font-size: 14px; font-weight: 800;
+}
+
+#pong .campaign-row-label { font-size: 11px; color: var(--ink-soft); margin-top: 2px;
+}
+
+#pong .result {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#pong .winner {
+    font-family: var(--font-display);
+    margin-top: 18px;
+    font-size: 34px;
+    font-weight: 900;
+    line-height: 1.15;
+    letter-spacing: -1.5px;
+}
+
+#pong .result-score { margin-top: 10px; font-size: 18px; font-weight: 700;
+}
+
+#pong .result-percentages { margin-top: 40px; border-top: 1px solid var(--ink);
+}
+
+#pong .result-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 14px;
+}
+
+#pong .result-row strong { font-size: 16px;
+}
+
+#pong .result-buttons { margin-top: auto; padding-bottom: 24px;
 }
