@@ -1,9 +1,12 @@
+import { openPong, closePong } from "./pong.js";
+
 // ============================================================
 // Données (chargées depuis data/*.json au démarrage)
 // ============================================================
 let QUESTIONS_QUIZ = [];
 let QUESTIONS_CITATIONS = [];
 let QUESTIONS_PERSONS = [];
+
 
 // Index pré-calculé pour "Qui est-ce ?" : { niveau: { homme: [...], femme: [...] } }
 // Construit une seule fois au chargement pour éviter de filtrer/mélanger
@@ -29,6 +32,67 @@ const STORAGE_KEYS = {
     quiestce_presidentielle: "quizPolitiqueBestScoreQuiestcePresidentielle"
 };
 
+const DAILY_STORAGE_KEYS = {
+    lastLogin: "quizPolitiqueLastLoginDate",
+    streakDays: "quizPolitiqueStreakDays",
+    dailyScore: "quizPolitiqueDailyScore",
+    dailyScoreDate: "quizPolitiqueDailyScoreDate"
+};
+
+function updateDailyStats() {
+    const today = new Date().toISOString().split('T')[0];
+    const lastLogin = localStorage.getItem(DAILY_STORAGE_KEYS.lastLogin);
+    let streakDays = parseInt(localStorage.getItem(DAILY_STORAGE_KEYS.streakDays) || "0", 10);
+
+    if (lastLogin !== today) {
+        if (lastLogin) {
+            const lastDate = new Date(lastLogin);
+            const currentDate = new Date(today);
+            const diffDays = Math.round((currentDate - lastDate) / (1000 * 60 * 60 * 24));
+
+            if (diffDays === 1) {
+                streakDays += 1;
+            } else if (diffDays > 1) {
+                streakDays = 1;
+            }
+        } else {
+            streakDays = 1;
+        }
+        localStorage.setItem(DAILY_STORAGE_KEYS.lastLogin, today);
+        localStorage.setItem(DAILY_STORAGE_KEYS.streakDays, String(streakDays));
+    }
+
+    const lastScoreDate = localStorage.getItem(DAILY_STORAGE_KEYS.dailyScoreDate);
+    if (lastScoreDate !== today) {
+        localStorage.setItem(DAILY_STORAGE_KEYS.dailyScore, "0");
+        localStorage.setItem(DAILY_STORAGE_KEYS.dailyScoreDate, today);
+    }
+
+    refreshGlobalTopbar();
+}
+
+function refreshGlobalTopbar() {
+    const streakDays = localStorage.getItem(DAILY_STORAGE_KEYS.streakDays) || "1";
+    const dailyScore = localStorage.getItem(DAILY_STORAGE_KEYS.dailyScore) || "0";
+
+    const dailyStreakEl = $("dailyStreakVal");
+    const dailyScoreEl = $("dailyScoreVal");
+
+    if (dailyStreakEl) dailyStreakEl.textContent = `🔥 ${streakDays} j`;
+    if (dailyScoreEl) dailyScoreEl.textContent = `${dailyScore} pts`;
+}
+
+function addDailyScore(points) {
+    const today = new Date().toISOString().split('T')[0];
+    const currentDaily = parseInt(localStorage.getItem(DAILY_STORAGE_KEYS.dailyScore) || "0", 10);
+    const newDaily = currentDaily + points;
+
+    localStorage.setItem(DAILY_STORAGE_KEYS.dailyScore, String(newDaily));
+    localStorage.setItem(DAILY_STORAGE_KEYS.dailyScoreDate, today);
+    refreshGlobalTopbar();
+}
+// ------------------------------
+
 let currentMode = "quiz";
 let currentNiveau = null;
 let roundQuestions = [];
@@ -51,9 +115,9 @@ const $ = (id) => document.getElementById(id);
 // ============================================================
 async function loadData() {
     const [quiz, citations, persons] = await Promise.all([
-        fetch("data/quiz.json").then(r => r.json()),
-        fetch("data/citations.json").then(r => r.json()),
-        fetch("data/persons.json").then(r => r.json())
+        fetch("/data/quiz.json").then(r => r.json()),
+        fetch("/data/citations.json").then(r => r.json()),
+        fetch("/data/persons.json").then(r => r.json())
     ]);
     QUESTIONS_QUIZ = quiz;
     QUESTIONS_CITATIONS = citations;
@@ -406,6 +470,7 @@ function submitAnswer(correct, btnEl) {
     updateStreakDisplay();
 
     if (points > 0) {
+        addDailyScore(points);
         const pop = $("pointsPop");
         pop.textContent = (comboJustApplied ? "COMBO x" + COMBO_MULTIPLIER + " · " : "") + "+" + points;
         pop.classList.toggle("combo", comboJustApplied);
@@ -491,6 +556,7 @@ function goHome() {
     $("screenIntro").classList.remove("hidden");
     $("introBestQuiz").textContent = getBest("quiz");
     $("introBestCitations").textContent = getBest("citations");
+    $("introBestquiestce").textContent = getBest("quiestce");
 }
 
 function goLevelScreen() {
@@ -502,6 +568,11 @@ function initUI() {
     $("btnStartQuiz").addEventListener("click", () => startGame("quiz"));
     $("btnStartCitations").addEventListener("click", () => startGame("citations"));
     $("btnGoLevel").addEventListener("click", goLevelScreen);
+    $("btnStartPong").addEventListener("click", openPong);
+    document.addEventListener("pong:exit", () => {
+        closePong();
+        goHome();
+    });
     $("btnLevelBack").addEventListener("click", () => {
         $("screenLevel").classList.add("hidden");
         $("screenIntro").classList.remove("hidden");
@@ -514,6 +585,7 @@ function initUI() {
     $("btnHome").addEventListener("click", goHome);
     $("introBestQuiz").textContent = getBest("quiz");
     $("introBestCitations").textContent = getBest("citations");
+    $("introBestquiestce").textContent = getBest("quiestce");
 }
 
 // ============================================================
@@ -521,6 +593,7 @@ function initUI() {
 // ============================================================
 (async function init() {
     initUI();
+    updateDailyStats(); // <--- AJOUTER CETTE LIGNE
     try {
         await loadData();
     } catch (err) {
