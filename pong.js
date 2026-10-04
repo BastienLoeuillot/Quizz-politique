@@ -839,7 +839,7 @@ const App = (function() {
     if (state.currentMatchMode !== "campaign" || !state.campaign) {
       document.getElementById("resultStageTitle").textContent = "Partie terminée";
       addButton("REJOUER UNE PARTIE", "btn-again", showSelection);
-      addButton("MENU", "level-btn", showSelection);
+      addButton("MENU", "btn", showSelection);
       return;
     }
 
