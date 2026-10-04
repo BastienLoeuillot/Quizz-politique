@@ -47,11 +47,14 @@
         <div id="screenLevel" class="hidden screen">
             <h1>Qui est-ce ?</h1>
             <p style="font-size:14px;color:var(--ink-soft);margin-bottom:20px;">Choisis ton niveau.</p>
-            <button class="level-btn" id="btnLevelFacile">Facile</button>
-            <button class="level-btn" id="btnLevelMoyen">Moyen</button>
-            <button class="level-btn" id="btnLevelDifficile">Difficile</button>
-            <button class="level-btn level-btn-presidentielle" id="btnLevelPresidentielle">Présidentielle</button>
-            <div style="height:6px;"></div>
+            <button class="btn" id="btnLevelFacile">Facile</button>
+            <div style="height:10px;"></div>
+            <button class="btn" id="btnLevelMoyen">Moyen</button>
+            <div style="height:10px;"></div>
+            <button class="btn" id="btnLevelDifficile">Difficile</button>
+            <div style="height:10px;"></div>
+            <button class="btn level-btn-presidentielle" id="btnLevelPresidentielle">Présidentielle</button>
+            <div style="height:10px;"></div>
             <button class="btn-again btn" id="btnLevelBack">Retour</button>
         </div>
 
@@ -120,8 +123,10 @@
 
     <div class="selection-label">Mode de jeu</div>
     <div class="mode-toggle">
-      <button id="quickModeButton" class="active" onclick="PongApp.setMode('quick')" aria-label="Partie Rapide">PARTIE RAPIDE</button>
-      <button id="campaignModeButton" onclick="PongApp.setMode('campaign')" aria-label="Campagne Présidentielle">CAMPAGNE PRÉSIDENTIELLE</button>
+      <button id="quickModeButton" class="btn" onclick="PongApp.setMode('quick')">PARTIE RAPIDE</button>
+      <div style="height:10px;"></div>
+      <button id="campaignModeButton" class="btn" onclick="PongApp.setMode('campaign')">CAMPAGNE PRÉSIDENTIELLE</button>
+      <div style="height:20px;"></div>
     </div>
 
     <div id="campaignInfo" class="info-box hidden">
@@ -145,15 +150,14 @@
     <div id="difficultyBlock">
       <div class="selection-label">Difficulté</div>
       <div class="difficulty">
-        <button id="easyButton" class="active" onclick="PongApp.setDifficulty('easy')" aria-label="Difficulté Facile">FACILE</button>
-        <button id="normalButton" onclick="PongApp.setDifficulty('normal')" aria-label="Difficulté Normal">NORMAL</button>
-        <button id="hardButton" onclick="PongApp.setDifficulty('hard')" aria-label="Difficulté Difficile">DIFFICILE</button>
+        <button id="easyButton" class="btn" onclick="PongApp.setDifficulty('easy')">FACILE</button>
+        <button id="normalButton" class="btn" onclick="PongApp.setDifficulty('normal')">NORMAL</button>
+        <button id="hardButton" class="btn" onclick="PongApp.setDifficulty('hard')">DIFFICILE</button>
       </div>
     </div>
 
-    <button class="btn-again" id="startButton" onclick="PongApp.startGame()" aria-label="Lancer la partie">JOUER</button>
-
-    <button class="level-btn" onclick="PongApp.exit()" aria-label="Retour à l'accueil">Accueil</button>
+    <button class="btn" id="startButton" onclick="PongApp.startGame()" aria-label="Lancer la partie">JOUER</button>
+    <button class="btn" onclick="PongApp.exit()" aria-label="Retour à l'accueil">Accueil</button>
 
     <div class="stats-title">Vos statistiques</div>
     <div class="stats">
@@ -202,8 +206,8 @@
     <h1 id="campaignTransitionTitle">Résultats</h1>
     <div style="margin-top:-8px;font-size:14px;color:var(--ink-soft);line-height:1.5;" id="campaignTransitionIntro"></div>
     <div style="margin-top:22px;" id="campaignTransitionList"></div>
-    <button class="btn-again" id="campaignTransitionButton" onclick="PongApp.continueCampaignTransition()" aria-label="Continuer la campagne">CONTINUER</button>
-    <button class="level-btn" onclick="PongApp.showSelection()" aria-label="Retour au menu principal">MENU</button>
+    <button class="btn" id="campaignTransitionButton" onclick="PongApp.continueCampaignTransition()" aria-label="Continuer la campagne">CONTINUER</button>
+    <button class="btn" onclick="PongApp.showSelection()" aria-label="Retour au menu principal">MENU</button>
   </section>
 
   <!-- RÉSULTAT -->
