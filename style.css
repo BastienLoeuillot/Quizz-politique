@@ -318,28 +318,6 @@ body {
     padding: 0 24px 24px;
 }
 
-.btn-again {
-    width: 100%;
-    border: 0;
-    background: var(--ink);
-    color: #fff;
-    border-radius: 8px;
-    font-family: inherit;
-    font-size: 15px;
-    font-weight: 700;
-    padding: 15px;
-    cursor: pointer;
-    transition: opacity .15s, transform .08s;
-}
-
-.btn-again:hover {
-    opacity: .82;
-}
-
-.btn-again:active {
-    transform: scale(0.98);
-}
-
 .btn{
     width: 100%;
     border: 0;
