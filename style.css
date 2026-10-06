@@ -53,7 +53,6 @@ body {
     border-radius: 12px 12px 0 0;
     position: fixed;
     top: 0;
-    left: 50%;
     transform: translateX(-50%);
     width: 90%;          /* Ajuste selon le rendu souhaité */
     max-width: 480px;    /* S'aligne souvent sur la largeur du conteneur mobile */
