@@ -600,12 +600,13 @@ function initUI() {
     $("btnStartQuiz").addEventListener("click", () => startGame("quiz"));
     $("btnStartCitations").addEventListener("click", () => startGame("citations"));
     $("btnGoLevel").addEventListener("click", goLevelScreen);
-    $("btnStartPong").addEventListener("click", openPong);
-        // Met à jour la barre de navigation si le jeu est lancé depuis le bouton de l'accueil
-        document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-        document.querySelector('.nav-btn[data-target="pong"]').classList.add('active');
-        changerPage('pong');
-    });
+   $("btnStartPong").addEventListener("click", () => {
+    openPong();
+    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+    const pongBtn = document.querySelector('.nav-btn[data-target="pong"]');
+    if (pongBtn) pongBtn.classList.add('active');
+    changerPage('pong');
+});
 
     document.addEventListener("pong:exit", () => {
         // Quand le joueur quitte le Pong (ex: bouton Accueil dans Pong)
