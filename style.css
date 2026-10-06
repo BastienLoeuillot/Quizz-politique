@@ -888,9 +888,11 @@ body {
 .bottom-nav {
     position: fixed;
     bottom: 0;
-    left: 0;
-    right: 0;
+    left: 50%;
     height: 65px;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 460px;
     background-color: rgba(255, 255, 255, 0.9);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -898,7 +900,7 @@ body {
     justify-content: space-around;
     align-items: center;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
-    z-index: 1000;
+    z-index: 3000;
     padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
