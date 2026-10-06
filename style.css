@@ -49,13 +49,16 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 24px 12px;
-    border-radius: 12px 12px 0 0;
+    padding: 12px 24px
+    border-radius: 0 0 12px 12px;
     position: fixed;
     top: 0;
-    width: 90%;          /* Ajuste selon le rendu souhaité */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;          /* Ajuste selon le rendu souhaité */
     max-width: 480px;    /* S'aligne souvent sur la largeur du conteneur mobile */
     z-index: 1000;
+    background-color: #f2f2f2;
 }
 
 .topbar-global .lbl {
