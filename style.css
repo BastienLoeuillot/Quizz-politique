@@ -15,9 +15,6 @@
     --img-radius: 12px;
 }
 
-#page-accueil {
-    padding-top: 70px; /* Ajustez la valeur selon la hauteur exacte de votre topbar */
-
 img {
     border-radius: var(--img-radius);
     display: block;
