@@ -180,6 +180,27 @@ function verdictFor(s) {
 }
 
 // ============================================================
+// Navigation / Gestion des pages
+// ============================================================
+export function changerPage(targetId) {
+    // 1. Masquer toutes les sections ayant la classe .page
+    const pages = document.querySelectorAll('.page');
+    pages.forEach(page => page.classList.add('hidden'));
+
+    // 2. Traitement spécifique selon la page ciblée
+    if (targetId === 'pong') {
+        openPong(); // Ouvre Pong via pong.js[cite: 3]
+    } else {
+        closePong(); // Ferme le canvas/boucle de Pong si ouvert[cite: 3]
+        const pageCible = document.getElementById(targetId);
+        if (pageCible) {
+            pageCible.classList.remove('hidden');
+        }
+        goHome(); // Réinitialise l'écran d'accueil à son état initial[cite: 2]
+    }
+}
+
+// ============================================================
 // Construction d'une manche "Qui est-ce ?"
 // ============================================================
 // Construit une manche : 10 cibles piochées dans le groupe du niveau choisi
@@ -565,14 +586,34 @@ function goLevelScreen() {
 }
 
 function initUI() {
+    const navButtons = document.querySelectorAll('.nav-btn');
+    navButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            navButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            const targetId = button.getAttribute('data-target');
+            changerPage(targetId);
+        });
+    });
+    
+    // Reste des écouteurs existants...
     $("btnStartQuiz").addEventListener("click", () => startGame("quiz"));
     $("btnStartCitations").addEventListener("click", () => startGame("citations"));
     $("btnGoLevel").addEventListener("click", goLevelScreen);
     $("btnStartPong").addEventListener("click", openPong);
-    document.addEventListener("pong:exit", () => {
-        closePong();
-        goHome();
+        // Met à jour la barre de navigation si le jeu est lancé depuis le bouton de l'accueil
+        document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelector('.nav-btn[data-target="pong"]').classList.add('active');
+        changerPage('pong');
     });
+
+    document.addEventListener("pong:exit", () => {
+        // Quand le joueur quitte le Pong (ex: bouton Accueil dans Pong)
+        document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelector('.nav-btn[data-target="page-accueil"]').classList.add('active');
+        changerPage('page-accueil');
+    });
+
     $("btnLevelBack").addEventListener("click", () => {
         $("screenLevel").classList.add("hidden");
         $("screenIntro").classList.remove("hidden");
