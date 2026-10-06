@@ -41,7 +41,7 @@ body {
     align-items: flex-start;
     justify-content: center;
     min-height: 100vh;
-    padding: 24px 16px;
+    padding: 24px 16px 86px;
     line-height: 1.45;
 }
 
@@ -55,8 +55,10 @@ body {
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 80%;          /* Ajuste selon le rendu souhaité */
-    max-width: 480px;    /* S'aligne souvent sur la largeur du conteneur mobile */
+    width: min(92vw, 480px);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 16px;
     z-index: 1000;
     background-color: #f2f2f2;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -880,10 +882,6 @@ body {
 }
 
 #pong .result-buttons { margin-top: auto; padding-bottom: 24px;
-}
-/* Décalage en bas pour ne pas masquer le contenu avec la barre */
-body {
-    padding-bottom: 70px;
 }
 
 /* Structure fixe du menu en bas */
