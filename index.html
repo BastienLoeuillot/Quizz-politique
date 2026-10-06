@@ -10,8 +10,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Sora:wght@700;800;900&family=Syne:wght@500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-
+    
 <body>
+<div id="page-accueil" class="page">
     <div class="topbar-global" id="globalTopbar">
     <div class="grp">
         <div class="lbl">Série</div>
@@ -21,8 +22,8 @@
         <div class="lbl">Score du jour</div>
         <div class="val" id="dailyScoreVal">0 pts</div>
     </div>
-</div>
     <div class="cab" id="cab">
+</div>
 
         <!-- INTRO -->
         <div id="screenIntro" class="screen intro">
@@ -114,7 +115,7 @@
 
     </div>
 
-    <div id="pong" class="hidden">
+    <div id="pong" class="page hidden">
 <div class="app">
   <!-- SÉLECTION -->
   <section id="selectionScreen" class="screen">
@@ -236,6 +237,24 @@
 
 
     <script type="module" src="game.js"></script>
+<nav class="bottom-nav">
+    <button class="nav-btn active" data-target="page-accueil">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        <span class="nav-label">Accueil</span>
+    </button>
+    
+    <button class="nav-btn" data-target="pong">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <!-- Icône de manette / jeu -->
+            <rect x="2" y="6" width="20" height="12" rx="2"/>
+            <path d="M6 12h4m-2-2v4m10-2h.01m-3 0h.01"/>
+        </svg>
+        <span class="nav-label">Pol-Pong</span>
+    </button>
+</nav>
 </body>
 
 </html>
