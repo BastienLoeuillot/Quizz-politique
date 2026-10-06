@@ -49,7 +49,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 24px
+    padding: 12px 24px;
     border-radius: 0 0 12px 12px;
     position: fixed;
     top: 0;
