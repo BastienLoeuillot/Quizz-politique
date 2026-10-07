@@ -365,7 +365,7 @@ body {
     padding: 4px 8px;
 }
 
-.btnrow {
+row {
     padding: 0 24px 24px;
 }
 
@@ -405,6 +405,12 @@ body {
 }
 
 #page-mixed .btn {
+    font-size: 12px;
+    padding: 40px 15px;
+    border-radius: 15px;
+}
+
+#screenIntro .btn
     font-size: 12px;
     padding: 40px 15px;
     border-radius: 15px;
