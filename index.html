@@ -204,6 +204,32 @@
 </div>
 </div>
 
+<div id="page-compte" class="page hidden">
+    <div class="screen">
+        <h1>Mon compte</h1>
+        <div class="account-stats">
+            <div class="account-stat">
+                <div class="account-stat-label">Réponses justes</div>
+                <div class="account-stat-value" id="statAnswerRate">—</div>
+                <div class="account-stat-detail" id="statAnswerDetail"></div>
+            </div>
+            <div class="account-stat">
+                <div class="account-stat-label">Parties de Pol-pong jouées</div>
+                <div class="account-stat-value" id="statPongGames">0</div>
+            </div>
+            <div class="account-stat">
+                <div class="account-stat-label">Taux de victoire (Pol-pong)</div>
+                <div class="account-stat-value" id="statPongWinRate">—</div>
+                <div class="account-stat-detail" id="statPongWinDetail"></div>
+            </div>
+            <div class="account-stat">
+                <div class="account-stat-label">Record de points en une journée</div>
+                <div class="account-stat-value" id="statDailyRecord">0 pts</div>
+            </div>
+        </div>
+    </div>
+</div>
+    
 <div id="page-mixed" class="page hidden">
     <button class="btn" id="btnStartQuiz">Quiz</button>
     <div style="height: 10px;"></div>
@@ -246,6 +272,13 @@
           <path d="M6.586 14.414A2 2 0 0 1 5.172 15H3a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h2.172a2 2 0 0 1 1.414.586l1.56 1.56a1.207 1.207 0 0 1 0 1.708z"/><path d="M9 3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2.172a2 2 0 0 1-.586 1.414l-1.56 1.56a1.207 1.207 0 0 1-1.708 0l-1.56-1.56A2 2 0 0 1 9 5.172z"/>
         </svg>
     </button>
+
+<button class="nav-btn" data-target="page-compte">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user preview-icon">
+      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+      <circle cx="12" cy="7" r="4"/>
+    </svg>
+</button>
 </nav>
 </body>
 
