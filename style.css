@@ -998,8 +998,8 @@ row {
 }
 
 .nav-icon {
-    width: 22px;
-    height: 22px;
+    position: relative;
+    z-index: 2;
 
     transition:
         transform 0.3s cubic-bezier(.34, 1.56, .64, 1),
@@ -1018,13 +1018,13 @@ row {
     content: "";
     position: absolute;
     left: 50%;
-    top: 50%;
-    width: 45px;
-    height: 45px;
+    top: 18px;
+    width: 36px;
+    height: 36px;
     transform: translate(-50%, -50%);
     background: rgba(254, 191, 2, 0.18);
     border-radius: 50%;
-    z-index: -1;
+    z-index: 1;
     animation: activeBubble 0.3s cubic-bezier(.34, 1.56, .64, 1);
 }
 
@@ -1033,6 +1033,7 @@ row {
         opacity: 0;
         transform: translate(-50%, -50%) scale(0.6);
     }
+
     to {
         opacity: 1;
         transform: translate(-50%, -50%) scale(1);
