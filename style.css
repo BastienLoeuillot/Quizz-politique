@@ -582,7 +582,6 @@ body {
 #pong {
     position: fixed;
     inset: 0;
-    z-index: 2000;            /* au-dessus de la topbar globale (1000) */
     overflow-y: auto;
     display: flex;
     justify-content: center;
