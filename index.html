@@ -10,8 +10,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Sora:wght@700;800;900&family=Syne:wght@500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-    
+
 <body>
+    <!-- BARRE SUPERIEURE GLOBALE -->
     <div class="topbar-global" id="globalTopbar">
         <div class="grp">
             <div class="lbl">Série</div>
@@ -21,35 +22,33 @@
             <div class="lbl">Score du jour</div>
             <div class="val" id="dailyScoreVal">0 pts</div>
         </div>
-  </div>
-
-<div id="page-accueil" class="page">
-
-<!-- INTRO -->
-<div id="screenIntro" class="screen intro">
-  <div class="screen">
-        <button class="btn" id="btnStartMixedPage">Quiz rapide</button>
-        <div style="height: 10px;"></div>
-        <div class="bestscore" style="margin-top:20px;">
-            Meilleur score : <span id="mixedPageBest">0</span> pts
-        </div>
-  </div>
-</div>
-
-    <!-- NIVEAU (Qui est-ce ?) -->
-    <div id="screenLevel" class="hidden screen">
-        <h1>Qui est-ce ?</h1>
-        <p style="font-size:14px;color:var(--ink-soft);margin-bottom:20px;">Choisis ton niveau.</p>
-        <button class="btn" id="btnLevelFacile">Facile</button>
-        <div style="height: 10px;"></div>
-        <button class="btn" id="btnLevelMoyen">Moyen</button>
-        <div style="height: 10px;"></div>
-        <button class="btn" id="btnLevelDifficile">Difficile</button>
-        <div style="height: 10px;"></div>
-        <button class="btn level-btn-presidentielle" id="btnLevelPresidentielle">Présidentielle</button>
-        <div style="height: 10px;"></div>
-        <button class="btn" id="btnLevelBack">Retour</button>
     </div>
+
+    <!-- PAGE 1 : ACCUEIL / QUIZ -->
+    <div id="page-accueil" class="page">
+        <!-- INTRO -->
+        <div id="screenIntro" class="screen intro">
+            <button class="btn" id="btnStartMixedPage">Quiz rapide</button>
+            <div style="height: 10px;"></div>
+            <div class="bestscore" style="margin-top:20px;">
+                Meilleur score : <span id="mixedPageBest">0</span> pts
+            </div>
+        </div>
+
+        <!-- NIVEAU (Qui est-ce ?) -->
+        <div id="screenLevel" class="hidden screen">
+            <h1>Qui est-ce ?</h1>
+            <p style="font-size:14px;color:var(--ink-soft);margin-bottom:20px;">Choisis ton niveau.</p>
+            <button class="btn" id="btnLevelFacile">Facile</button>
+            <div style="height: 10px;"></div>
+            <button class="btn" id="btnLevelMoyen">Moyen</button>
+            <div style="height: 10px;"></div>
+            <button class="btn" id="btnLevelDifficile">Difficile</button>
+            <div style="height: 10px;"></div>
+            <button class="btn level-btn-presidentielle" id="btnLevelPresidentielle">Présidentielle</button>
+            <div style="height: 10px;"></div>
+            <button class="btn" id="btnLevelBack">Retour</button>
+        </div>
 
         <!-- GAME -->
         <div id="screenGame" class="hidden" style="position:relative;">
@@ -68,7 +67,6 @@
                     <div class="val" id="bestVal">0</div>
                 </div>
                 <button class="quit-game" id="btnQuitGame" aria-label="Abandonner la partie">×</button>
-
             </div>
             <div class="gauge" id="gauge"></div>
             <div class="timerwrap">
@@ -83,8 +81,6 @@
                 <div class="name-display hidden" id="qName"></div>
             </div>
 
-            <!-- La réponse/le contexte s'affiche ici, juste sous la question/le nom,
-                 avant les choix, pour mieux la mettre en valeur une fois révélée. -->
             <div class="reveal hidden" id="reveal">
                 <div class="source-block" id="revealSource"></div>
                 <div class="context-block" id="revealContext"></div>
@@ -106,183 +102,188 @@
             <div style="height: 10px;"></div>
             <button class="btn" id="btnHome">Écran principal</button>
         </div>
-
-<div id="pong" class="page hidden">
-<div class="app">
-  <!-- SÉLECTION -->
-  <section id="selectionScreen" class="screen">
-    <div class="selection-label">Mode de jeu</div>
-    <div class="mode-toggle">
-      <button id="quickModeButton" class="btn" onclick="PongApp.setMode('quick')">PARTIE RAPIDE</button>
-      <div style="height:10px;"></div>  
-      <button id="campaignModeButton" class="btn" onclick="PongApp.setMode('campaign')">CAMPAGNE PRÉSIDENTIELLE</button>
-      <div style="height:10px;"></div>
     </div>
 
-    <div id="campaignInfo" class="info-box hidden">
-      Vous vous présentez à la présidentielle. Choisissez votre camp et amenez votre candidat jusqu'à la victoire finale !
-    </div>
+    <!-- PAGE 2 : POL-PONG -->
+    <div id="pong" class="page hidden">
+        <div class="app">
+            <!-- SÉLECTION -->
+            <section id="selectionScreen" class="screen">
+                <div class="selection-label">Mode de jeu</div>
+                <div class="mode-toggle">
+                    <button id="quickModeButton" class="btn" onclick="PongApp.setMode('quick')">PARTIE RAPIDE</button>
+                    <div style="height:10px;"></div>
+                    <button id="campaignModeButton" class="btn" onclick="PongApp.setMode('campaign')">CAMPAGNE PRÉSIDENTIELLE</button>
+                    <div style="height:10px;"></div>
+                </div>
 
-    <div class="selection-label">Votre camp</div>
-    <div class="select-box">
-      <select id="campSelect" onchange="PongApp.setCamp(this.value)" aria-label="Sélectionner un camp"></select>
-      <div class="select-arrow" aria-hidden="true">▼</div>
-    </div>
+                <div id="campaignInfo" class="info-box hidden">
+                    Vous vous présentez à la présidentielle. Choisissez votre camp et amenez votre candidat jusqu'à la victoire finale !
+                </div>
 
-    <div class="selection-label">Votre candidat</div>
-    <div class="select-box">
-      <select id="playerSelect" onchange="PongApp.updateCandidatePreview()" aria-label="Sélectionner un candidat"></select>
-      <div class="select-arrow" aria-hidden="true">▼</div>
-    </div>
+                <div class="selection-label">Votre camp</div>
+                <div class="select-box">
+                    <select id="campSelect" onchange="PongApp.setCamp(this.value)" aria-label="Sélectionner un camp"></select>
+                    <div class="select-arrow" aria-hidden="true">▼</div>
+                </div>
 
-    <div class="candidate-preview-row" id="candidatePreviewRow"></div>
+                <div class="selection-label">Votre candidat</div>
+                <div class="select-box">
+                    <select id="playerSelect" onchange="PongApp.updateCandidatePreview()" aria-label="Sélectionner un candidat"></select>
+                    <div class="select-arrow" aria-hidden="true">▼</div>
+                </div>
 
-    <div id="difficultyBlock">
-      <div class="selection-label">Difficulté</div>
-      <div class="difficulty">
-        <button id="easyButton" class="btn" onclick="PongApp.setDifficulty('easy')">FACILE</button>
-        <button id="normalButton" class="btn" onclick="PongApp.setDifficulty('normal')">NORMAL</button>
-        <button id="hardButton" class="btn" onclick="PongApp.setDifficulty('hard')">DIFFICILE</button>
-      </div>
-    </div>
-    <button class="btn" id="startButton" onclick="PongApp.startGame()" aria-label="Lancer la partie">JOUER</button>
-  </section>
+                <div class="candidate-preview-row" id="candidatePreviewRow"></div>
 
-  <!-- JEU -->
-  <section id="gameScreen" class="hidden">
-    <div class="game-wrapper">
-      <canvas id="gameCanvas"></canvas>
-      <button class="quit" onclick="PongApp.quitGame()" aria-label="Quitter la partie">×</button>
-      <div class="game-ui">
-        <div class="top-info">
-          <div class="percentage" id="opponentPercentage">—</div>
+                <div id="difficultyBlock">
+                    <div class="selection-label">Difficulté</div>
+                    <div class="difficulty">
+                        <button id="easyButton" class="btn" onclick="PongApp.setDifficulty('easy')">FACILE</button>
+                        <button id="normalButton" class="btn" onclick="PongApp.setDifficulty('normal')">NORMAL</button>
+                        <button id="hardButton" class="btn" onclick="PongApp.setDifficulty('hard')">DIFFICILE</button>
+                    </div>
+                </div>
+                <button class="btn" id="startButton" onclick="PongApp.startGame()" aria-label="Lancer la partie">JOUER</button>
+            </section>
+
+            <!-- JEU -->
+            <section id="gameScreen" class="hidden">
+                <div class="game-wrapper">
+                    <canvas id="gameCanvas"></canvas>
+                    <button class="quit" onclick="PongApp.quitGame()" aria-label="Quitter la partie">×</button>
+                    <div class="game-ui">
+                        <div class="top-info">
+                            <div class="percentage" id="opponentPercentage">—</div>
+                        </div>
+                        <div class="game-score">
+                            <span id="scoreOpponent">0</span>
+                            <span class="score-separator">—</span>
+                            <span id="scorePlayer">0</span>
+                        </div>
+                        <div class="bottom-info">
+                            <div id="gameMessage" class="message" aria-live="polite"></div>
+                            <div class="powerup-gauge-container">
+                                <div id="powerupGauge" class="powerup-gauge-fill"></div>
+                            </div>
+                            <div class="percentage" id="playerPercentage">—</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TRANSITION CAMPAGNE -->
+            <section id="campaignTransitionScreen" class="screen hidden">
+                <h1 id="campaignTransitionTitle">Résultats</h1>
+                <div style="margin-top:-8px;font-size:14px;color:var(--ink-soft);line-height:1.5;" id="campaignTransitionIntro"></div>
+                <div style="margin-top:22px;" id="campaignTransitionList"></div>
+                <button class="btn" id="campaignTransitionButton" onclick="PongApp.continueCampaignTransition()" aria-label="Continuer la campagne">CONTINUER</button>
+                <div style="height: 10px;"></div>
+                <button class="btn" onclick="PongApp.showSelection()" aria-label="Retour au menu principal">MENU</button>
+            </section>
+
+            <!-- RÉSULTAT -->
+            <section id="resultScreen" class="screen result hidden">
+                <div class="tag" id="resultStageTitle">Partie terminée</div>
+                <div class="winner" id="winnerName">—</div>
+                <div class="result-score" id="pongFinalScore">—</div>
+                <div class="result-percentages">
+                    <div class="result-row">
+                        <span id="resultPlayerName">—</span>
+                        <strong id="resultPlayerPercent">—</strong>
+                    </div>
+                    <div class="result-row">
+                        <span id="resultOpponentName">—</span>
+                        <strong id="resultOpponentPercent">—</strong>
+                    </div>
+                </div>
+                <div class="result-buttons" id="resultButtons"></div>
+            </section>
         </div>
-        <div class="game-score">
-          <span id="scoreOpponent">0</span>
-          <span class="score-separator">—</span>
-          <span id="scorePlayer">0</span>
-        </div>
-        <div class="bottom-info">
-          <div id="gameMessage" class="message" aria-live="polite"></div>
-          <div class="powerup-gauge-container">
-            <div id="powerupGauge" class="powerup-gauge-fill"></div>
-          </div>
-          <div class="percentage" id="playerPercentage">—</div>
-        </div>
-      </div>
     </div>
-  </section>
 
-  <!-- TRANSITION CAMPAGNE -->
-  <section id="campaignTransitionScreen" class="screen hidden">
-    <h1 id="campaignTransitionTitle">Résultats</h1>
-    <div style="margin-top:-8px;font-size:14px;color:var(--ink-soft);line-height:1.5;" id="campaignTransitionIntro"></div>
-    <div style="margin-top:22px;" id="campaignTransitionList"></div>
-    <button class="btn" id="campaignTransitionButton" onclick="PongApp.continueCampaignTransition()" aria-label="Continuer la campagne">CONTINUER</button>
-    <div style="height: 10px;"></div>
-    <button class="btn" onclick="PongApp.showSelection()" aria-label="Retour au menu principal">MENU</button>
-  </section>
-
-  <!-- RÉSULTAT -->
-  <section id="resultScreen" class="screen result hidden">
-    <div class="tag" id="resultStageTitle">Partie terminée</div>
-    <div class="winner" id="winnerName">—</div>
-    <div class="result-score" id="pongFinalScore">—</div>
-    <div class="result-percentages">
-      <div class="result-row">
-        <span id="resultPlayerName">—</span>
-        <strong id="resultPlayerPercent">—</strong>
-      </div>
-      <div class="result-row">
-        <span id="resultOpponentName">—</span>
-        <strong id="resultOpponentPercent">—</strong>
-      </div>
-    </div>
-    <div class="result-buttons" id="resultButtons"></div>
-  </section>
-</div>
-</div>
-</div>
-
-<div id="page-compte" class="page hidden">
-    <div class="screen">
-        <h1>Mon compte</h1>
-        <div class="account-stats">
-            <div class="account-stat">
-                <div class="account-stat-label">Réponses justes</div>
-                <div class="account-stat-value" id="statAnswerRate">—</div>
-                <div class="account-stat-detail" id="statAnswerDetail"></div>
+    <!-- PAGE 3 : COMPTE -->
+    <div id="page-compte" class="page hidden">
+        <div class="screen">
+            <h1>Mon compte</h1>
+            <div class="account-stats">
+                <div class="account-stat">
+                    <div class="account-stat-label">Réponses justes</div>
+                    <div class="account-stat-value" id="statAnswerRate">—</div>
+                    <div class="account-stat-detail" id="statAnswerDetail"></div>
+                </div>
+                <div class="account-stat">
+                    <div class="account-stat-label">Parties de Pol-pong jouées</div>
+                    <div class="account-stat-value" id="statPongGames">0</div>
+                </div>
+                <div class="account-stat">
+                    <div class="account-stat-label">Taux de victoire (Pol-pong)</div>
+                    <div class="account-stat-value" id="statPongWinRate">—</div>
+                    <div class="account-stat-detail" id="statPongWinDetail"></div>
+                </div>
+                <div class="account-stat">
+                    <div class="account-stat-label">Record de points en une journée</div>
+                    <div class="account-stat-value" id="statDailyRecord">0 pts</div>
+                </div>
             </div>
-            <div class="account-stat">
-                <div class="account-stat-label">Parties de Pol-pong jouées</div>
-                <div class="account-stat-value" id="statPongGames">0</div>
-            </div>
-            <div class="account-stat">
-                <div class="account-stat-label">Taux de victoire (Pol-pong)</div>
-                <div class="account-stat-value" id="statPongWinRate">—</div>
-                <div class="account-stat-detail" id="statPongWinDetail"></div>
-            </div>
-            <div class="account-stat">
-                <div class="account-stat-label">Record de points en une journée</div>
-                <div class="account-stat-value" id="statDailyRecord">0 pts</div>
+        </div>
+    </div>
+
+    <!-- PAGE 4 : MIXED / CATEGORIES -->
+    <div id="page-mixed" class="page hidden">
+        <div class="screen">
+            <div style="height: 10px;"></div>
+            <button class="btn" id="btnStartQuiz">Quiz</button>
+            <div style="height: 10px;"></div>
+            <button class="btn" id="btnStartCitations">Citations</button>
+            <div style="height: 10px;"></div>
+            <button class="btn" id="btnGoLevel">Qui est-ce ?</button>
+            <div style="height: 10px;"></div>
+            <div class="bestscore" id="introBest" style="margin-top:20px;">
+                Meilleur score — Quiz : <span id="introBestQuiz">0</span> · Citations : <span id="introBestCitations">0</span> · Qui est-ce ? : <span id="introBestquiestce">0</span>
             </div>
         </div>
     </div>
-</div>
-    
-<div id="page-mixed" class="page hidden">
-    <div class="screen">
-        <div style="height: 10px;"></div>
-        <button class="btn" id="btnStartQuiz">Quiz</button>
-        <div style="height: 10px;"></div>
-        <button class="btn" id="btnStartCitations">Citations</button>
-        <div style="height: 10px;"></div>
-        <button class="btn" id="btnGoLevel">Qui est-ce ?</button>
-        <div style="height: 10px;"></div>
-        <div class="bestscore" id="introBest" style="margin-top:20px;">
-        Meilleur score — Quiz : <span id="introBestQuiz">0</span> · Citations : <span id="introBestCitations">0</span> · Qui est-ce ? : <span id="introBestquiestce">0</span>
-        </div>
-    </div>
-</div>
+
+    <!-- NAVIGATION BASSE -->
+    <nav class="bottom-nav">
+        <button class="nav-btn" data-target="page-mixed">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-grid preview-icon">
+                <rect width="7" height="7" x="3" y="3" rx="1"/>
+                <rect width="7" height="7" x="14" y="3" rx="1"/>
+                <rect width="7" height="7" x="14" y="14" rx="1"/>
+                <rect width="7" height="7" x="3" y="14" rx="1"/>
+            </svg>
+        </button>
+
+        <button class="nav-btn active" data-target="page-accueil">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open-text preview-icon">
+                <path d="M12 5v16"/>
+                <path d="M16 13h2"/>
+                <path d="M16 9h2"/>
+                <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"/>
+                <path d="M6 13h2"/>
+                <path d="M6 9h2"/>
+            </svg>
+        </button>
+
+        <button class="nav-btn" data-target="pong">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gamepad-directional preview-icon">
+                <path d="M11.146 15.854a1.207 1.207 0 0 1 1.708 0l1.56 1.56A2 2 0 0 1 15 18.828V21a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-2.172a2 2 0 0 1 .586-1.414z"/>
+                <path d="M18.828 15a2 2 0 0 1-1.414-.586l-1.56-1.56a1.207 1.207 0 0 1 0-1.708l1.56-1.56A2 2 0 0 1 18.828 9H21a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1z"/>
+                <path d="M6.586 14.414A2 2 0 0 1 5.172 15H3a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h2.172a2 2 0 0 1 1.414.586l1.56 1.56a1.207 1.207 0 0 1 0 1.708z"/><path d="M9 3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2.172a2 2 0 0 1-.586 1.414l-1.56 1.56a1.207 1.207 0 0 1-1.708 0l-1.56-1.56A2 2 0 0 1 9 5.172z"/>
+            </svg>
+        </button>
+
+        <button class="nav-btn" data-target="page-compte">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user preview-icon">
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+            </svg>
+        </button>
+    </nav>
+
+    <!-- CHARGEMENT DES SCRIPTS -->
     <script type="module" src="game.js"></script>
-
-<nav class="bottom-nav">
-    
-    <button class="nav-btn" data-target="page-mixed">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-grid preview-icon">
-          <rect width="7" height="7" x="3" y="3" rx="1"/>
-          <rect width="7" height="7" x="14" y="3" rx="1"/>
-          <rect width="7" height="7" x="14" y="14" rx="1"/>
-          <rect width="7" height="7" x="3" y="14" rx="1"/>
-        </svg>
-    </button>
-
-    <button class="nav-btn active" data-target="page-accueil">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open-text preview-icon">
-          <path d="M12 5v16"/>
-          <path d="M16 13h2"/>
-          <path d="M16 9h2"/>
-          <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"/>
-          <path d="M6 13h2"/>
-          <path d="M6 9h2"/>
-        </svg>
-    </button>
-
-    <button class="nav-btn" data-target="pong">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gamepad-directional preview-icon">
-          <path d="M11.146 15.854a1.207 1.207 0 0 1 1.708 0l1.56 1.56A2 2 0 0 1 15 18.828V21a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-2.172a2 2 0 0 1 .586-1.414z"/>
-          <path d="M18.828 15a2 2 0 0 1-1.414-.586l-1.56-1.56a1.207 1.207 0 0 1 0-1.708l1.56-1.56A2 2 0 0 1 18.828 9H21a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1z"/>
-          <path d="M6.586 14.414A2 2 0 0 1 5.172 15H3a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h2.172a2 2 0 0 1 1.414.586l1.56 1.56a1.207 1.207 0 0 1 0 1.708z"/><path d="M9 3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2.172a2 2 0 0 1-.586 1.414l-1.56 1.56a1.207 1.207 0 0 1-1.708 0l-1.56-1.56A2 2 0 0 1 9 5.172z"/>
-        </svg>
-    </button>
-
-<button class="nav-btn" data-target="page-compte">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user preview-icon">
-      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
-      <circle cx="12" cy="7" r="4"/>
-    </svg>
-</button>
-</nav>
 </body>
 
 </html>
