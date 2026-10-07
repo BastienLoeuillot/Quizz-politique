@@ -37,8 +37,11 @@ const DAILY_STORAGE_KEYS = {
     lastLogin: "quizPolitiqueLastLoginDate",
     streakDays: "quizPolitiqueStreakDays",
     dailyScore: "quizPolitiqueDailyScore",
-    dailyScoreDate: "quizPolitiqueDailyScoreDate"
+    dailyScoreDate: "quizPolitiqueDailyScoreDate",
+    dailyRecord: "quizPolitiqueDailyRecord"
 };
+
+const ANSWER_STATS_KEY = "quizPolitiqueAnswerStats";
 
 function updateDailyStats() {
     const today = new Date().toISOString().split('T')[0];
@@ -90,9 +93,47 @@ function addDailyScore(points) {
 
     localStorage.setItem(DAILY_STORAGE_KEYS.dailyScore, String(newDaily));
     localStorage.setItem(DAILY_STORAGE_KEYS.dailyScoreDate, today);
+
+    const record = parseInt(localStorage.getItem(DAILY_STORAGE_KEYS.dailyRecord) || "0", 10);
+    if (newDaily > record) {
+        localStorage.setItem(DAILY_STORAGE_KEYS.dailyRecord, String(newDaily));
+    }
     refreshGlobalTopbar();
 }
-// ------------------------------
+
+function readJSON(key, fallback) {
+    try {
+        return JSON.parse(localStorage.getItem(key)) || fallback;
+    } catch (e) {
+        return fallback;
+    }
+}
+
+// Appelée à chaque question répondue (le temps écoulé compte comme faux)
+function recordAnswer(isCorrect) {
+    const s = readJSON(ANSWER_STATS_KEY, { correct: 0, total: 0 });
+    s.total = (s.total || 0) + 1;
+    if (isCorrect) s.correct = (s.correct || 0) + 1;
+    localStorage.setItem(ANSWER_STATS_KEY, JSON.stringify(s));
+}
+
+function renderAccount() {
+    const a = readJSON(ANSWER_STATS_KEY, { correct: 0, total: 0 });
+    const pong = readJSON("debatStats", { games: 0, wins: 0 });
+    const dailyRecord = parseInt(localStorage.getItem(DAILY_STORAGE_KEYS.dailyRecord) || "0", 10);
+    const dailyToday = parseInt(localStorage.getItem(DAILY_STORAGE_KEYS.dailyScore) || "0", 10);
+
+    $("statAnswerRate").textContent = a.total ? Math.round(a.correct / a.total * 100) + " %" : "—";
+    $("statAnswerDetail").textContent = a.total
+        ? `${a.correct} bonne${a.correct > 1 ? "s" : ""} réponse${a.correct > 1 ? "s" : ""} sur ${a.total}`
+        : "Aucune question jouée pour l'instant";
+
+    $("statPongGames").textContent = pong.games || 0;
+    $("statPongWinRate").textContent = pong.games ? Math.round((pong.wins || 0) / pong.games * 100) + " %" : "—";
+    $("statPongWinDetail").textContent = pong.games ? `${pong.wins || 0} victoire${pong.wins > 1 ? "s" : ""}` : "";
+
+    $("statDailyRecord").textContent = Math.max(dailyRecord, dailyToday) + " pts";
+}
 
 let currentMode = "quiz";
 let currentNiveau = null;
@@ -199,6 +240,7 @@ export function changerPage(targetId) {
             pageCible.classList.remove('hidden');
         }
         goHome(); // Réinitialise l'écran d'accueil à son état initial[cite: 2]
+        if (targetId === 'page-compte') renderAccount();
     }
 }
 
@@ -507,6 +549,7 @@ function submitAnswer(correct, btnEl) {
     const timedOut = correct === null;
     const isCorrect = correct === true;
     const maxPoints = isQuiestce ? QUIESTCE_MAX_POINTS : MAX_POINTS;
+    recordAnswer(isCorrect);
 
     let points = 0;
     let comboJustApplied = false;
