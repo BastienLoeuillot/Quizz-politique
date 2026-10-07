@@ -948,27 +948,20 @@ row {
     bottom: 12px;
     left: 50%;
     transform: translateX(-50%);
-
     width: calc(100% - 24px);
     max-width: 440px;
     height: 64px;
-
     display: flex;
     align-items: center;
     justify-content: space-around;
-
     background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-
     border: 1px solid rgba(0, 0, 0, 0.07);
     border-radius: 20px;
-
     box-shadow:
         0 8px 30px rgba(0, 0, 0, 0.08);
-
     z-index: 3000;
-
     padding: 5px;
 
     /* Animation d'apparition */
@@ -978,23 +971,17 @@ row {
 /* Style des boutons */
 .nav-btn {
     position: relative;
-
     flex: 1;
     height: 54px;
-
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
     gap: 3px;
-
     background: none;
     border: none;
     outline: none;
-
     color: #8e8e93;
-
     font-family: inherit;
     font-size: 10px;
     font-weight: 600;
@@ -1030,12 +1017,12 @@ row {
 .nav-btn.active::before {
     content: "";
     position: absolute;
-    top: 7px;
     left: 50%;
+    top: 50%;
     width: 45px;
     height: 45px;
-    transform: translateX(-50%);
-    background: rgba(254, 191, 2, 0.22);
+    transform: translate(-50%, -50%);
+    background: rgba(254, 191, 2, 0.18);
     border-radius: 50%;
     z-index: -1;
     animation: activeBubble 0.3s cubic-bezier(.34, 1.56, .64, 1);
@@ -1044,12 +1031,11 @@ row {
 @keyframes activeBubble {
     from {
         opacity: 0;
-        transform: translateX(-50%) scale(0.6);
+        transform: translate(-50%, -50%) scale(0.6);
     }
-
     to {
         opacity: 1;
-        transform: translateX(-50%) scale(1);
+        transform: translate(-50%, -50%) scale(1);
     }
 }
 
