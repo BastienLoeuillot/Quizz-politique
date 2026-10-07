@@ -853,14 +853,14 @@ const App = (function() {
 
     if (stage === "primaire") {
       document.getElementById("resultStageTitle").textContent = "Primaire remportée";
-      addButton("VOIR LES RÉSULTATS", "btn-again", afterPrimaireWin);
+      addButton("VOIR LES RÉSULTATS", "btn", afterPrimaireWin);
     } else if (stage === "premier") {
       document.getElementById("resultStageTitle").textContent = "Premier tour remporté";
-      addButton("VOIR LES RÉSULTATS", "btn-again", afterPremierTourWin);
+      addButton("VOIR LES RÉSULTATS", "btn", afterPremierTourWin);
     } else if (stage === "second") {
       document.getElementById("resultStageTitle").textContent = "Élu(e) Président(e) de la République";
       document.getElementById("winnerName").textContent = state.playerCandidate.name + " 🇫🇷";
-      addButton("NOUVELLE CAMPAGNE", "btn-again", () => { state.campaign = null; showSelection(); });
+      addButton("NOUVELLE CAMPAGNE", "btn", () => { state.campaign = null; showSelection(); });
     }
     addButton("MENU", "level-btn", showSelection);
   }
