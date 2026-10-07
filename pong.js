@@ -313,7 +313,6 @@ const App = (function() {
 
     populateCandidateSelect();
     setMode(state.mode);
-    updateStatsUI();
   }
 
   function populateCampSelect() {
@@ -1018,20 +1017,6 @@ const App = (function() {
       stats.playerCharacters[state.playerCandidate.name] = (stats.playerCharacters[state.playerCandidate.name] || 0) + 1;
     }
     try { localStorage.setItem("debatStats", JSON.stringify(stats)); } catch (e) {}
-  }
-
-  function updateStatsUI() {
-    const stats = getStats();
-    document.getElementById("statGames").textContent = stats.games || 0;
-    document.getElementById("statWinRate").textContent = stats.games ? Math.round((stats.wins || 0) / stats.games * 100) + " %" : "—";
-    
-    const entries = Object.entries(stats.playerCharacters || {});
-    if (entries.length) {
-      entries.sort((a, b) => b[1] - a[1]);
-      document.getElementById("statFavorite").textContent = entries[0][0];
-    } else {
-      document.getElementById("statFavorite").textContent = "—";
-    }
   }
 
   // Retour à l'accueil du quiz (écouté dans game.js)
