@@ -43,8 +43,13 @@ const DAILY_STORAGE_KEYS = {
 
 const ANSWER_STATS_KEY = "quizPolitiqueAnswerStats";
 
+function todayStr() {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+
 function updateDailyStats() {
-    const today = new Date().toISOString().split('T')[0];
+    const today = todayStr();
     const lastLogin = localStorage.getItem(DAILY_STORAGE_KEYS.lastLogin);
     let streakDays = parseInt(localStorage.getItem(DAILY_STORAGE_KEYS.streakDays) || "0", 10);
 
@@ -87,7 +92,7 @@ function refreshGlobalTopbar() {
 }
 
 function addDailyScore(points) {
-    const today = new Date().toISOString().split('T')[0];
+    const today = todayStr();
     const currentDaily = parseInt(localStorage.getItem(DAILY_STORAGE_KEYS.dailyScore) || "0", 10);
     const newDaily = currentDaily + points;
 
