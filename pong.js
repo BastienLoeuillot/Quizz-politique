@@ -845,7 +845,7 @@ const App = (function() {
     const stage = state.campaign.stage;
     if (!playerWon) {
       document.getElementById("resultStageTitle").textContent = stage === "primaire" ? "Primaire perdue" : (stage === "premier" ? "Premier tour perdu" : "Second tour perdu");
-      addButton(stage === "primaire" ? "REJOUER LA PRIMAIRE" : "RECOMMENCER LA CAMPAGNE", "btn-again", restartCampaign);
+      addButton(stage === "primaire" ? "REJOUER LA PRIMAIRE" : "RECOMMENCER LA CAMPAGNE", "btn", restartCampaign);
       addButton("MENU", "level-btn", showSelection);
       return;
     }
