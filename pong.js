@@ -637,7 +637,7 @@ const App = (function() {
     const paddleCenter = paddle.x + paddle.width / 2;
     const impact = (ball.x - paddleCenter) / (paddle.width / 2);
     ball.vx = impact * 300 * boost;
-    ball.speed *= 1.035;
+    hitPaddle : ball.vy *= 1.035;
 
     const currentSpeed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
     if (currentSpeed > 700) {
