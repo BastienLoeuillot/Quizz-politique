@@ -197,6 +197,12 @@ function getBest(key) {
     return parseInt(localStorage.getItem(STORAGE_KEYS[key]) || "0", 10);
 }
 
+function getBestQuiestce() {
+    return Math.max(...["facile","moyen","difficile","presidentielle"]
+        .map(n => getBest("quiestce_" + n)));
+}
+// $("introBestquiestce").textContent = getBestQuiestce();
+
 function setBest(key, v) {
     localStorage.setItem(STORAGE_KEYS[key], String(v));
 }
@@ -232,14 +238,14 @@ export function changerPage(targetId) {
 
     // 2. Traitement spécifique selon la page ciblée
     if (targetId === 'pong') {
-        openPong(); // Ouvre Pong via pong.js[cite: 3]
+        openPong(); // Ouvre Pong via pong.js
     } else {
-        closePong(); // Ferme le canvas/boucle de Pong si ouvert[cite: 3]
+        closePong(); // Ferme le canvas/boucle de Pong si ouvert
         const pageCible = document.getElementById(targetId);
         if (pageCible) {
             pageCible.classList.remove('hidden');
         }
-        goHome(); // Réinitialise l'écran d'accueil à son état initial[cite: 2]
+        goHome(); // Réinitialise l'écran d'accueil à son état initial
         if (targetId === 'page-compte') renderAccount();
     }
 }
@@ -254,41 +260,34 @@ export function changerPage(targetId) {
 // parcourir/mélanger l'ensemble des 1000+ personnes à chaque cible.
 function buildQuiestceRound(niveau) {
     const bucket = personsIndex[niveau] || { homme: [], femme: [] };
-
-    // Exception : le niveau "présidentielle" a un vivier réduit (peu de
-    // candidats marqués candidat:true). Les 10 noms à deviner restent tous
-    // différents, mais les photos utilisées comme leurres peuvent revenir
-    // d'une question à l'autre. Les autres niveaux gardent l'unicité totale.
-    if (niveau === "presidentielle") {
-        return buildQuiestceRoundPresidentielle(bucket);
-    }
-
-    const usedNames = new Set();
-    const usedPhotos = new Set();
+    const usedTargets = new Set();
     const targets = shuffle([...(bucket.homme || []), ...(bucket.femme || [])]);
     const round = [];
 
     for (const target of targets) {
         if (round.length >= ROUND_LENGTH) break;
-        if (usedNames.has(target.nom) || usedPhotos.has(target.photo)) continue;
+        if (usedTargets.has(target.nom)) continue;
 
-        const isAvailable = p => p.nom !== target.nom && !usedNames.has(p.nom) && !usedPhotos.has(p.photo);
-        const decoyPool = shuffle((bucket[target.sexe] || []).filter(isAvailable));
+        const ok = p => p.sexe === target.sexe && p.nom !== target.nom && p.photo !== target.photo;
+        // d'abord les leurres du même niveau, puis on complète avec toute la base
+        let pool = shuffle((bucket[target.sexe] || []).filter(ok));
+        if (pool.length < QUIESTCE_GRID_SIZE - 1) {
+            pool = pool.concat(shuffle(QUESTIONS_PERSONS.filter(ok)));
+        }
 
-        const decoys = decoyPool.slice(0, QUIESTCE_GRID_SIZE - 1);
-        if (decoys.length < QUIESTCE_GRID_SIZE - 1) continue; // pas assez de leurres du même sexe disponibles
+        const seen = new Set();
+        const decoys = [];
+        for (const d of pool) {
+            if (seen.has(d.nom) || seen.has(d.photo)) continue;
+            seen.add(d.nom); seen.add(d.photo);
+            decoys.push(d);
+            if (decoys.length === QUIESTCE_GRID_SIZE - 1) break;
+        }
+        if (decoys.length < QUIESTCE_GRID_SIZE - 1) continue;
 
-        usedNames.add(target.nom);
-        usedPhotos.add(target.photo);
-        decoys.forEach(d => {
-            usedNames.add(d.nom);
-            usedPhotos.add(d.photo);
-        });
-
+        usedTargets.add(target.nom);
         round.push({
-            nom: target.nom,
-            fonction: target.fonction,
-            autre: target.autre,
+            nom: target.nom, fonction: target.fonction, autre: target.autre,
             correctPhoto: target.photo,
             photos: shuffle([target.photo, ...decoys.map(d => d.photo)])
         });
@@ -326,46 +325,6 @@ function buildMixedRound() {
     });
 }
 
-// Variante utilisée uniquement pour "présidentielle" : chacun des 10 noms à
-// deviner est unique sur la manche (jamais deux fois la même personne à
-// trouver). En revanche, les photos servant de LEURRES ne sont pas retirées
-// du vivier une fois utilisées : elles peuvent réapparaître d'une question à
-// l'autre, ce qui permet de tenir 10 questions même avec peu de candidats.
-// Seule contrainte conservée : à l'intérieur d'UNE MÊME grille, la personne à
-// trouver et les leurres sont tous différents les uns des autres.
-function buildQuiestceRoundPresidentielle(bucket) {
-    const usedTargetNames = new Set();
-    const targets = shuffle([...(bucket.homme || []), ...(bucket.femme || [])]);
-    const round = [];
-
-    for (const target of targets) {
-        if (round.length >= ROUND_LENGTH) break;
-        if (usedTargetNames.has(target.nom)) continue;
-
-        let decoyPool = shuffle((bucket[target.sexe] || []).filter(p => p.nom !== target.nom));
-
-        // Une même personne ne doit pas apparaître deux fois DANS LA MÊME grille.
-        const seenInGrid = new Set();
-        const decoys = [];
-        for (const d of decoyPool) {
-            if (seenInGrid.has(d.nom)) continue;
-            seenInGrid.add(d.nom);
-            decoys.push(d);
-            if (decoys.length >= QUIESTCE_GRID_SIZE - 1) break;
-        }
-
-        usedTargetNames.add(target.nom);
-
-        round.push({
-            nom: target.nom,
-            fonction: target.fonction,
-            autre: target.autre,
-            correctPhoto: target.photo,
-            photos: shuffle([target.photo, ...decoys.map(d => d.photo)])
-        });
-    }
-    return round;
-}
 
 // ============================================================
 // Affichage
@@ -373,7 +332,7 @@ function buildQuiestceRoundPresidentielle(bucket) {
 function buildGauge() {
     const g = $("gauge");
     g.innerHTML = "";
-    for (let i = 0; i < ROUND_LENGTH; i++) {
+    for (let i = 0; i < roundQuestions.length; i++) {
         const seg = document.createElement("div");
         seg.className = "seg";
         seg.id = "seg-" + i;
@@ -458,7 +417,7 @@ function showQuestion() {
     $("revealFonction").classList.add("hidden");
     $("revealFonction").innerHTML = "";
 
-    if (currentMode === "quiestce") {
+    if (isQuiestce) {
         $("qSurtitre").textContent = "";
         $("qText").classList.add("hidden");
         $("qName").classList.remove("hidden");
@@ -626,9 +585,10 @@ function submitAnswer(correct, btnEl) {
     }
 
     updateGauge();
-
+    
+    const mode = q.__mode || currentMode;
     let nextDelay = 1100;
-    if (!isQuiestce && currentMode === "citations" && (q.source || q.contexte)) nextDelay = 3800;
+    if (!isQuiestce && mode === "citations" && (q.source || q.contexte)) nextDelay = 3800;
     if (isQuiestce) nextDelay = 1800;
 
         nextTimeout = setTimeout(() => {
@@ -661,7 +621,7 @@ function goHome() {
     $("screenIntro").classList.remove("hidden");
     $("introBestQuiz").textContent = getBest("quiz");
     $("introBestCitations").textContent = getBest("citations");
-    $("introBestquiestce").textContent = getBest("quiestce");
+    $("introBestquiestce").textContent = getBestQuiestce();
     if ($("introBestMixed")) $("introBestMixed").textContent = getBest("mixed");
     if ($("mixedPageBest")) $("mixedPageBest").textContent = getBest("mixed");
 }
@@ -709,7 +669,7 @@ function initUI() {
     $("btnHome").addEventListener("click", goHome);
     $("introBestQuiz").textContent = getBest("quiz");
     $("introBestCitations").textContent = getBest("citations");
-    $("introBestquiestce").textContent = getBest("quiestce");
+    $("introBestquiestce").textContent = getBestQuiestce();
 }
 
 // ============================================================
