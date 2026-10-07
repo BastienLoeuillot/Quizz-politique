@@ -1029,23 +1029,15 @@ row {
 
 .nav-btn.active::before {
     content: "";
-
     position: absolute;
-
-    top: 6px;
+    top: 7px;
     left: 50%;
-
-    width: 34px;
-    height: 34px;
-
+    width: 45px;
+    height: 45px;
     transform: translateX(-50%);
-
-    background: #febf02;
-
-    border-radius: 12px;
-
+    background: rgba(254, 191, 2, 0.22);
+    border-radius: 50%;
     z-index: -1;
-
     animation: activeBubble 0.3s cubic-bezier(.34, 1.56, .64, 1);
 }
 
