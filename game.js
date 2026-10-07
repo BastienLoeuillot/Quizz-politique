@@ -29,7 +29,8 @@ const STORAGE_KEYS = {
     quiestce_facile: "quizPolitiqueBestScoreQuiestceFacile",
     quiestce_moyen: "quizPolitiqueBestScoreQuiestceMoyen",
     quiestce_difficile: "quizPolitiqueBestScoreQuiestceDifficile",
-    quiestce_presidentielle: "quizPolitiqueBestScoreQuiestcePresidentielle"
+    quiestce_presidentielle: "quizPolitiqueBestScoreQuiestcePresidentielle",
+    mixed: "quizPolitiqueBestScoreMixed"
 };
 
 const DAILY_STORAGE_KEYS = {
@@ -103,6 +104,7 @@ let timerStart = null;
 let timeLeft = TIME_LIMIT;
 let timerRAF = null;
 let answered = false;
+let nextTimeout = null;
 
 // ---- État du combo ----
 let streak = 0;
@@ -252,6 +254,36 @@ function buildQuiestceRound(niveau) {
     return round;
 }
 
+function buildMixedRound() {
+    // 1. Choisir des personnes pour "Qui est-ce ?"
+    const randomNiveaux = ["facile", "moyen", "difficile", "presidentielle"];
+    const quiestceQuestions = [];
+    for (let i = 0; i < 4; i++) {
+        const lvl = randomNiveaux[Math.floor(Math.random() * randomNiveaux.length)];
+        const subRound = buildQuiestceRound(lvl);
+        if (subRound && subRound.length > 0) {
+            const picked = subRound[Math.floor(Math.random() * subRound.length)];
+            quiestceQuestions.push({ ...picked, __mode: "quiestce" });
+        }
+    }
+
+    const quizQuestions = QUESTIONS_QUIZ.map(q => ({ ...q, __mode: "quiz" }));
+    const citationsQuestions = QUESTIONS_CITATIONS.map(q => ({ ...q, __mode: "citations" }));
+
+    const pool = [...quiestceQuestions, ...quizQuestions, ...citationsQuestions];
+    const shuffled = shuffle(pool).slice(0, ROUND_LENGTH);
+
+    return shuffled.map(q => {
+        if (q.__mode === "quiestce") {
+            return q;
+        }
+        return {
+            ...q,
+            shuffled: shuffle(q.propositions)
+        };
+    });
+}
+
 // Variante utilisée uniquement pour "présidentielle" : chacun des 10 noms à
 // deviner est unique sur la manche (jamais deux fois la même personne à
 // trouver). En revanche, les photos servant de LEURRES ne sont pas retirées
@@ -336,7 +368,9 @@ function startGame(mode, niveau) {
     if (mode) currentMode = mode;
     if (niveau) currentNiveau = niveau;
 
-    if (currentMode === "quiestce") {
+    if (currentMode === "mixed") {
+        roundQuestions = buildMixedRound();
+    } else if (currentMode === "quiestce") {
         roundQuestions = buildQuiestceRound(currentNiveau);
     } else {
         roundQuestions = shuffle(poolFor(currentMode)).slice(0, ROUND_LENGTH).map(q => {
@@ -356,6 +390,11 @@ function startGame(mode, niveau) {
     $("bestVal").textContent = getBest(storageKey());
     updateStreakDisplay();
     buildGauge();
+
+    const pages = document.querySelectorAll('.page');
+    pages.forEach(p => p.classList.add('hidden'));
+    $("page-accueil").classList.remove('hidden');
+    
     $("screenIntro").classList.add("hidden");
     $("screenLevel").classList.add("hidden");
     $("screenEnd").classList.add("hidden");
@@ -366,6 +405,7 @@ function startGame(mode, niveau) {
 function showQuestion() {
     answered = false;
     const q = roundQuestions[currentIndex];
+    const isQuiestce = q.photos !== undefined || q.__mode === "quiestce";
     updateGauge();
 
     $("reveal").classList.add("hidden");
@@ -463,7 +503,7 @@ function submitAnswer(correct, btnEl) {
     cancelAnimationFrame(timerRAF);
 
     const q = roundQuestions[currentIndex];
-    const isQuiestce = currentMode === "quiestce";
+    const isQuiestce = q.photos !== undefined || q.__mode === "quiestce";
     const timedOut = correct === null;
     const isCorrect = correct === true;
     const maxPoints = isQuiestce ? QUIESTCE_MAX_POINTS : MAX_POINTS;
@@ -548,7 +588,7 @@ function submitAnswer(correct, btnEl) {
     if (!isQuiestce && currentMode === "citations" && (q.source || q.contexte)) nextDelay = 3800;
     if (isQuiestce) nextDelay = 1800;
 
-    setTimeout(() => {
+        nextTimeout = setTimeout(() => {
         currentIndex++;
         if (currentIndex >= roundQuestions.length) {
             endGame();
@@ -571,6 +611,7 @@ function endGame() {
 
 function goHome() {
     cancelAnimationFrame(timerRAF);
+    clearTimeout(nextTimeout); 
     $("screenGame").classList.add("hidden");
     $("screenEnd").classList.add("hidden");
     $("screenLevel").classList.add("hidden");
@@ -578,6 +619,8 @@ function goHome() {
     $("introBestQuiz").textContent = getBest("quiz");
     $("introBestCitations").textContent = getBest("citations");
     $("introBestquiestce").textContent = getBest("quiestce");
+    if ($("introBestMixed")) $("introBestMixed").textContent = getBest("mixed");
+    if ($("mixedPageBest")) $("mixedPageBest").textContent = getBest("mixed");
 }
 
 function goLevelScreen() {
@@ -595,21 +638,17 @@ function initUI() {
             changerPage(targetId);
         });
     });
-    
-    // Reste des écouteurs existants...
+
     $("btnStartQuiz").addEventListener("click", () => startGame("quiz"));
     $("btnStartCitations").addEventListener("click", () => startGame("citations"));
+    if ($("btnStartMixed")) $("btnStartMixed").addEventListener("click", () => startGame("mixed"));
+    if ($("btnStartMixedPage")) $("btnStartMixedPage").addEventListener("click", () => startGame("mixed"));
     $("btnGoLevel").addEventListener("click", goLevelScreen);
-   $("btnStartPong").addEventListener("click", () => {
-    openPong();
-    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-    const pongBtn = document.querySelector('.nav-btn[data-target="pong"]');
-    if (pongBtn) pongBtn.classList.add('active');
-    changerPage('pong');
-});
+
+    // Abandon de partie (croix)
+    $("btnQuitGame").addEventListener("click", goHome);
 
     document.addEventListener("pong:exit", () => {
-        // Quand le joueur quitte le Pong (ex: bouton Accueil dans Pong)
         document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
         document.querySelector('.nav-btn[data-target="page-accueil"]').classList.add('active');
         changerPage('page-accueil');
