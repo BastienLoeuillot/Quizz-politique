@@ -7,6 +7,7 @@
     --card: #ffffff;
     --ink: #111;
     --ink-soft: #777;
+    --slowcolor: #ffd24d;
     --line: #ddd;
     --line-light: #eee;
     --ok: #1f9d55;
@@ -60,8 +61,6 @@ body {
     transform: translateX(-50%);
     padding: 12px 16px;
     z-index: 1000;
-    background-color: #f2f2f2;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .topbar-global .lbl {
@@ -112,6 +111,21 @@ body {
 
 .topbar .grp.right {
     text-align: right;
+}
+
+.quit-game {
+    border: 0;
+    background: transparent;
+    font-size: 26px;
+    line-height: 1;
+    color: var(--ink-soft);
+    cursor: pointer;
+    padding: 0 0 0 14px;
+    align-self: center;
+}
+
+.quit-game:hover {
+    color: var(--ink);
 }
 
 .gauge {
@@ -325,7 +339,7 @@ body {
 .btn{
     width: 100%;
     border: 0;
-    background: #febf02;
+    background: var(--slowcolor);
     color: var(--ink);
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -355,6 +369,12 @@ body {
     font-weight: 800;
     letter-spacing: -0.01em;
     margin-bottom: 24px;
+}
+
+#page-mixed .btn {
+    font-size: 12px;
+    padding: 40px 15px;
+    border-radius: 15px;
 }
 
 .app-title {
@@ -388,13 +408,13 @@ body {
     padding: 0 4px;
 }
 
-.screen .bestscore {
+.bestscore {
     font-size: 12px;
     color: var(--ink-soft);
     margin-bottom: 28px;
 }
 
-.screen .bestscore span {
+.bestscore span {
     color: var(--ink);
     font-weight: 700;
 }
