@@ -1,0 +1,418 @@
+[
+  {
+    "id": "pp_melenchon_001",
+    "candidat": "melenchon",
+    "affirmation": "Jean-Luc Mélenchon est né à Tanger, au Maroc.",
+    "reponse": true,
+    "explication": "Il déménage en France à 11 ans, en 1962, six ans après l’indépendance du Maroc.",
+    "difficulte": "facile"
+  },
+  {
+    "id": "pp_melenchon_002",
+    "candidat": "melenchon",
+    "affirmation": "Jean-Luc Mélenchon a été sénateur pendant près de vingt ans au total.",
+    "reponse": true,
+    "explication": "Il a été sénateur de 1986 à 2000, puis de 2004 à 2010.",
+    "difficulte": "facile"
+  },
+  {
+    "id": "pp_melenchon_003",
+    "candidat": "melenchon",
+    "affirmation": "Jean-Luc Mélenchon s’est présenté à l’élection présidentielle pour la première fois en 2007.",
+    "reponse": false,
+    "explication": "Il s’est présenté pour la première fois en 2012.",
+    "difficulte": "facile"
+  },
+  {
+    "id": "pp_melenchon_004",
+    "candidat": "melenchon",
+    "affirmation": "Jean-Luc Mélenchon a été ministre de l’Éducation nationale sous Lionel Jospin.",
+    "reponse": false,
+    "explication": "Il a été ministre délégué à l’Enseignement professionnel.",
+    "difficulte": "facile"
+  },
+  {
+    "id": "pp_hollande_001",
+    "candidat": "hollande",
+    "affirmation": "François Hollande a étudié à HEC Paris avant d’intégrer l’ENA.",
+    "reponse": true,
+    "explication": "Il est aussi passé par l’Institut d’études politiques de Paris.",
+    "difficulte": "facile"
+  },
+  {
+    "id": "pp_hollande_002",
+    "candidat": "hollande",
+    "affirmation": "François Hollande a été maire de Tulle pendant sept ans.",
+    "reponse": true,
+    "explication": "Il a également été président du conseil général de Corrèze.",
+    "difficulte": "facile"
+  },
+  {
+    "id": "pp_hollande_003",
+    "candidat": "hollande",
+    "affirmation": "Avant de devenir président de la République, François Hollande a présidé la région Limousin.",
+    "reponse": false,
+    "explication": "Il n’a jamais été président de région.",
+    "difficulte": "facile"
+  },
+  {
+    "id": "pp_hollande_004",
+    "candidat": "hollande",
+    "affirmation": "François Hollande a été premier secrétaire du Parti socialiste pendant la totalité du quinquennat de Nicolas Sarkozy.",
+    "reponse": false,
+    "explication": "Il ne l’a été que jusqu’en 2008.",
+    "difficulte": "facile"
+  },
+  {
+    "id": "pp_tondelier_001",
+    "candidat": "tondelier",
+    "affirmation": "Marine Tondelier a été élue à la tête d’Europe Écologie-Les Verts en décembre 2022.",
+    "reponse": true,
+    "explication": "Elle a succédé à Julien Bayou.",
+    "difficulte": "facile"
+  },
+  {
+    "id": "pp_tondelier_002",
+    "candidat": "tondelier",
+    "affirmation": "Marine Tondelier est élue d’opposition à Hénin-Beaumont, une ville dirigée par le Rassemblement national.",
+    "reponse": true,
+    "explication": "Elle siège au conseil municipal depuis 2014.",
+    "difficulte": "facile"
+  },
+  {
+    "id": "pp_tondelier_003",
+    "candidat": "tondelier",
+    "affirmation": "Marine Tondelier a conduit la liste écologiste aux élections européennes de 2024.",
+    "reponse": false,
+    "explication": "Marie Toussaint était tête de liste à ces élections.",
+    "difficulte": "moyen"
+  },
+  {
+    "id": "pp_tondelier_004",
+    "candidat": "tondelier",
+    "affirmation": "Marine Tondelier a été députée européenne avant de prendre la tête des Écologistes.",
+    "reponse": false,
+    "explication": "Elle était élue locale dans les Hauts-de-France.",
+    "difficulte": "moyen"
+  },
+  {
+    "id": "pp_roussel_001",
+    "candidat": "roussel",
+    "affirmation": "Fabien Roussel a travaillé comme journaliste à L’Humanité et à France Télévisions.",
+    "reponse": true,
+    "explication": "Il a aussi travaillé pour la société de production de son père Daniel Roussel.",
+    "difficulte": "difficile"
+  },
+  {
+    "id": "pp_roussel_002",
+    "candidat": "roussel",
+    "affirmation": "Fabien Roussel est devenu député en 2017, en succédant à Alain Bocquet.",
+    "reponse": true,
+    "explication": "Il était auparavant son attaché parlementaire.",
+    "difficulte": "moyen"
+  },
+  {
+    "id": "pp_roussel_003",
+    "candidat": "roussel",
+    "affirmation": "Fabien Roussel n’a jamais été élu local.",
+    "reponse": false,
+    "explication": "Il est maire de Saint-Amand-les-Eaux depuis 2025.",
+    "difficulte": "facile"
+  },
+  {
+    "id": "pp_roussel_004",
+    "candidat": "roussel",
+    "affirmation": "Fabien Roussel était le candidat communiste à la présidentielle de 2017.",
+    "reponse": false,
+    "explication": "Le parti a soutenu la candidature de Jean-Luc Mélenchon.",
+    "difficulte": "facile"
+  },
+  {
+    "id": "pp_glucksmann_001",
+    "candidat": "glucksmann",
+    "affirmation": "Raphaël Glucksmann a conseillé l’ancien président géorgien Mikheil Saakachvili.",
+    "reponse": true,
+    "explication": "Il a notamment participé aux discussions autour de l’intégration du pays à l’Union européenne.",
+    "difficulte": "facile"
+  },
+  {
+    "id": "pp_glucksmann_002",
+    "candidat": "glucksmann",
+    "affirmation": "Raphaël Glucksmann a coréalisé un documentaire consacré à la responsabilité française dans le génocide des Tutsi au Rwanda.",
+    "reponse": true,
+    "explication": "Le documentaire, coréalisé avec David Hazan et Pierre Mezerette, s’appelle “Tuez-les tous !”.",
+    "difficulte": "moyen"
+  },
+  {
+    "id": "pp_glucksmann_003",
+    "candidat": "glucksmann",
+    "affirmation": "Raphaël Glucksmann a travaillé comme correspondant permanent de France 2 à Moscou.",
+    "reponse": false,
+    "explication": "Il a été journaliste pendant quelques mois pour Le Soir d’Algérie.",
+    "difficulte": "moyen"
+  },
+  {
+    "id": "pp_glucksmann_004",
+    "candidat": "glucksmann",
+    "affirmation": "Raphaël Glucksmann a travaillé pour le ministère des Affaires étrangères sous Nicolas Sarkozy.",
+    "reponse": false,
+    "explication": "Il n’a jamais travaillé dans un gouvernement.",
+    "difficulte": "moyen"
+  },
+  {
+    "id": "pp_faure_001",
+    "candidat": "faure",
+    "affirmation": "Olivier Faure est premier secrétaire du Parti socialiste depuis 2018.",
+    "reponse": true,
+    "explication": "Il a été réélu trois fois, en 2021, 2023 et 2025.",
+    "difficulte": "facile"
+  },
+  {
+    "id": "pp_faure_002",
+    "candidat": "faure",
+    "affirmation": "Olivier Faure a été élu député en 2012 après l’élection de François Hollande.",
+    "reponse": true,
+    "explication": "Il a aussi été président du groupe socialiste pendant deux ans.",
+    "difficulte": "moyen"
+  },
+  {
+    "id": "pp_faure_003",
+    "candidat": "faure",
+    "affirmation": "Olivier Faure a dirigé la campagne présidentielle de François Hollande en 2012.",
+    "reponse": false,
+    "explication": "Le directeur de campagne était Pierre Moscovici.",
+    "difficulte": "difficile"
+  },
+  {
+    "id": "pp_faure_004",
+    "candidat": "faure",
+    "affirmation": "Olivier Faure a été sénateur jusqu’en 2012.",
+    "reponse": false,
+    "explication": "Il était secrétaire général du groupe socialiste à l’Assemblée nationale.",
+    "difficulte": "difficile"
+  },
+  {
+    "id": "pp_royal_001",
+    "candidat": "royal",
+    "affirmation": "Ségolène Royal a été la candidate du Parti socialiste à la présidentielle de 2007.",
+    "reponse": true,
+    "explication": "Elle a atteint le second tour face à Nicolas Sarkozy.",
+    "difficulte": "facile"
+  },
+  {
+    "id": "pp_royal_002",
+    "candidat": "royal",
+    "affirmation": "Ségolène Royal a présidé le conseil régional de Poitou-Charentes.",
+    "reponse": true,
+    "explication": "Elle a présidé la région pendant dix ans, de 2004 à 2014.",
+    "difficulte": "moyen"
+  },
+  {
+    "id": "pp_royal_003",
+    "candidat": "royal",
+    "affirmation": "Ségolène Royal a été ministre de la Justice d’Emmanuel Macron pendant trois mois.",
+    "reponse": false,
+    "explication": "Elle a été ministre de l’Environnement de François Hollande.",
+    "difficulte": "facile"
+  },
+  {
+    "id": "pp_royal_004",
+    "candidat": "royal",
+    "affirmation": "Ségolène Royal a dirigé une grande société pendant douze ans avant d’entrer en politique.",
+    "reponse": false,
+    "explication": "Elle a toujours travaillé en politique.",
+    "difficulte": "facile"
+  },
+  {
+    "id": "pp_attal_001",
+    "candidat": "attal",
+    "affirmation": "Gabriel Attal a été le plus jeune Premier ministre de la Ve République, à 34 ans.",
+    "reponse": true,
+    "explication": "Il devance de trois ans Laurent Fabius.",
+    "difficulte": "facile"
+  },
+  {
+    "id": "pp_attal_002",
+    "candidat": "attal",
+    "affirmation": "Gabriel Attal a été porte-parole du gouvernement pendant deux ans.",
+    "reponse": true,
+    "explication": "Il a aussi été chargé des comptes publics, puis ministre de l’Éducation.",
+    "difficulte": "facile"
+  },
+  {
+    "id": "pp_attal_003",
+    "candidat": "attal",
+    "affirmation": "Gabriel Attal était élu Les Républicains avant de rejoindre Renaissance.",
+    "reponse": false,
+    "explication": "Mais il a travaillé pour la ministre de la Santé socialiste Marisol Touraine de 2012 à 2017.",
+    "difficulte": "facile"
+  },
+  {
+    "id": "pp_attal_004",
+    "candidat": "attal",
+    "affirmation": "Gabriel Attal a fait toute sa scolarité à l’école publique.",
+    "reponse": false,
+    "explication": "Il a notamment étudié à l’École alsacienne.",
+    "difficulte": "facile"
+  },
+  {
+    "id": "pp_philippe_001",
+    "candidat": "philippe",
+    "affirmation": "Édouard Philippe est le premier Premier ministre d’Emmanuel Macron.",
+    "reponse": true,
+    "explication": "Il a été remplacé par Jean Castex en 2020.",
+    "difficulte": "facile"
+  },
+  {
+    "id": "pp_philippe_002",
+    "candidat": "philippe",
+    "affirmation": "Édouard Philippe a été maire du Havre avant d’être Premier ministre.",
+    "reponse": true,
+    "explication": "Il était maire du Havre depuis 2010 avant de démissionner en 2017.",
+    "difficulte": "facile"
+  },
+  {
+    "id": "pp_philippe_003",
+    "candidat": "philippe",
+    "affirmation": "Édouard Philippe a été un éphémère ministre de Nicolas Sarkozy pendant deux semaines.",
+    "reponse": false,
+    "explication": "Son premier poste au gouvernement a été Premier ministre.",
+    "difficulte": "facile"
+  },
+  {
+    "id": "pp_philippe_004",
+    "candidat": "philippe",
+    "affirmation": "Édouard Philippe a perdu ses cheveux et ses sourcils après un accident de voiture.",
+    "reponse": false,
+    "explication": "Il souffre d’alopécie.",
+    "difficulte": "facile"
+  },
+  {
+    "id": "pp_retailleau_001",
+    "candidat": "retailleau",
+    "affirmation": "Bruno Retailleau a présidé le conseil régional des Pays de la Loire.",
+    "reponse": true,
+    "explication": "Il l’a présidé pendant un peu plus d’un an.",
+    "difficulte": "difficile"
+  },
+  {
+    "id": "pp_retailleau_002",
+    "candidat": "retailleau",
+    "affirmation": "Bruno Retailleau a été metteur en scène pour le Puy du Fou.",
+    "reponse": true,
+    "explication": "Il y est entré comme cavalier bénévole à 17 ans.",
+    "difficulte": "facile"
+  },
+  {
+    "id": "pp_retailleau_003",
+    "candidat": "retailleau",
+    "affirmation": "Bruno Retailleau a été maire de Cholet pendant dix ans.",
+    "reponse": false,
+    "explication": "Il n’a jamais été maire de sa carrière.",
+    "difficulte": "moyen"
+  },
+  {
+    "id": "pp_retailleau_004",
+    "candidat": "retailleau",
+    "affirmation": "Bruno Retailleau s’est opposé à la candidature de François Fillon en 2017.",
+    "reponse": false,
+    "explication": "Il était l’un des premiers soutiens du candidat de droite.",
+    "difficulte": "moyen"
+  },
+  {
+    "id": "pp_lepen_001",
+    "candidat": "lepen",
+    "affirmation": "Marine Le Pen a une formation d’avocate.",
+    "reponse": true,
+    "explication": "Elle a notamment étudié le droit à Assas.",
+    "difficulte": "moyen"
+  },
+  {
+    "id": "pp_lepen_002",
+    "candidat": "lepen",
+    "affirmation": "Enfant, Marine Le Pen a survécu à un attentat contre l’appartement familial.",
+    "reponse": true,
+    "explication": "Une bombe avait été déposée devant l’immeuble de leur appartement.",
+    "difficulte": "moyen"
+  },
+  {
+    "id": "pp_lepen_003",
+    "candidat": "lepen",
+    "affirmation": "Marine Le Pen a été maire d’Hénin-Beaumont avant de devenir députée.",
+    "reponse": false,
+    "explication": "Elle n’a jamais été élue dans son fief.",
+    "difficulte": "moyen"
+  },
+  {
+    "id": "pp_lepen_004",
+    "candidat": "lepen",
+    "affirmation": "Marine Le Pen a été avocate pendant quinze ans.",
+    "reponse": false,
+    "explication": "Elle n’a jamais réussi à faire décoller sa carrière d’avocate indépendante.",
+    "difficulte": "moyen"
+  },
+  {
+    "id": "pp_zemmour_001",
+    "candidat": "zemmour",
+    "affirmation": "Éric Zemmour a travaillé comme journaliste politique au Figaro.",
+    "reponse": true,
+    "explication": "Il a aussi collaboré avec Marianne et Valeurs actuelles.",
+    "difficulte": "moyen"
+  },
+  {
+    "id": "pp_zemmour_002",
+    "candidat": "zemmour",
+    "affirmation": "Éric Zemmour a été condamné définitivement à douze reprises.",
+    "reponse": true,
+    "explication": "Il a notamment été condamné pour contestation de crime contre l’humanité, injures raciales et discrimination raciale.",
+    "difficulte": "facile"
+  },
+  {
+    "id": "pp_zemmour_003",
+    "candidat": "zemmour",
+    "affirmation": "Éric Zemmour a été député européen avant de créer son parti Reconquête !",
+    "reponse": false,
+    "explication": "Sa première expérience politique est sa candidature à la présidentielle de 2022.",
+    "difficulte": "facile"
+  },
+  {
+    "id": "pp_zemmour_004",
+    "candidat": "zemmour",
+    "affirmation": "Éric Zemmour a produit un documentaire sur Jeanne d’Arc pour Canal+.",
+    "reponse": false,
+    "explication": "Il n’a publié que des livres pour le moment.",
+    "difficulte": "facile"
+  },
+{
+  "id": "pp_bardella_001",
+  "candidat": "bardella",
+  "affirmation": "Jordan Bardella a été élu conseiller régional d’Île-de-France à 20 ans.",
+  "reponse": true,
+  "explication": "Il a été élu en décembre 2015, trois ans après avoir adhéré au Front national.",
+  "difficulte": "difficile"
+},
+{
+  "id": "pp_bardella_002",
+  "candidat": "bardella",
+  "affirmation": "Jordan Bardella est président du RN depuis 2022.",
+  "reponse": true,
+  "explication": "Il a battu l’ancien compagnon de Marine Le Pen, Louis Aliot.",
+  "difficulte": "moyen"
+},
+{
+  "id": "pp_bardella_003",
+  "candidat": "bardella",
+  "affirmation": "Jordan Bardella est titulaire d’une licence de géographie.",
+  "reponse": false,
+  "explication": "Il n’a jamais obtenu son diplôme.",
+  "difficulte": "facile"
+},
+{
+  "id": "pp_bardella_004",
+  "candidat": "bardella",
+  "affirmation": "Jordan Bardella était le candidat du RN aux élections municipales de Paris en 2026.",
+  "reponse": false,
+  "explication": "C’était Thierry Mariani.",
+  "difficulte": "facile"
+}
+]
