@@ -6,6 +6,7 @@ import { openPong, closePong } from "./pong.js";
 let QUESTIONS_QUIZ = [];
 let QUESTIONS_CITATIONS = [];
 let QUESTIONS_PERSONS = [];
+let QUESTIONS_DAILY_QUIZ = [];
 
 
 // Index pré-calculé pour "Qui est-ce ?" : { niveau: { homme: [...], femme: [...] } }
@@ -26,6 +27,7 @@ const COMBO_MULTIPLIER = 2;
 const STORAGE_KEYS = {
     quiz: "quizPolitiqueBestScoreQuiz",
     citations: "quizPolitiqueBestScoreCitations",
+    dailyquiz: "quizPolitiqueBestScoreDailyQuiz",
     quiestce_facile: "quizPolitiqueBestScoreQuiestceFacile",
     quiestce_moyen: "quizPolitiqueBestScoreQuiestceMoyen",
     quiestce_difficile: "quizPolitiqueBestScoreQuiestceDifficile",
@@ -38,14 +40,57 @@ const DAILY_STORAGE_KEYS = {
     streakDays: "quizPolitiqueStreakDays",
     dailyScore: "quizPolitiqueDailyScore",
     dailyScoreDate: "quizPolitiqueDailyScoreDate",
-    dailyRecord: "quizPolitiqueDailyRecord"
+    dailyRecord: "quizPolitiqueDailyRecord",
+    loginDays: "quizPolitiqueLoginDays"
 };
 
 const ANSWER_STATS_KEY = "quizPolitiqueAnswerStats";
 
+function dateStr(d) {
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+
 function todayStr() {
-      const d = new Date();
-      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+    return dateStr(new Date());
+}
+
+// Enregistre le jour courant dans l'historique des connexions (60 derniers jours conservés)
+function recordLoginDay() {
+    const today = todayStr();
+    const days = readJSON(DAILY_STORAGE_KEYS.loginDays, []);
+    // reprend la dernière connexion connue si l'historique est encore vide
+    const lastLogin = localStorage.getItem(DAILY_STORAGE_KEYS.lastLogin);
+    if (!days.length && lastLogin) days.push(lastLogin);
+    if (!days.includes(today)) days.push(today);
+    localStorage.setItem(DAILY_STORAGE_KEYS.loginDays, JSON.stringify(days.slice(-60)));
+}
+
+// Dessine les 7 ronds de la semaine en cours (lundi → dimanche)
+function renderWeekTracker() {
+    const wrap = $("weekTracker");
+    if (!wrap) return;
+
+    const letters = ["L", "M", "M", "J", "V", "S", "D"];
+    const names = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"];
+    const logged = new Set(readJSON(DAILY_STORAGE_KEYS.loginDays, []));
+
+    const now = new Date();
+    const offset = (now.getDay() + 6) % 7;   // 0 = lundi
+    const today = todayStr();
+
+    wrap.innerHTML = "";
+    for (let i = 0; i < 7; i++) {
+        const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - offset + i);
+        const key = dateStr(d);
+
+        const dot = document.createElement("div");
+        dot.className = "day-dot";
+        if (logged.has(key)) dot.classList.add("done");
+        if (key === today) dot.classList.add("today");
+        dot.textContent = letters[i];
+        dot.setAttribute("aria-label", names[i] + (logged.has(key) ? " : connecté" : ""));
+        wrap.appendChild(dot);
+    }
 }
 
 function updateDailyStats() {
@@ -76,7 +121,8 @@ function updateDailyStats() {
         localStorage.setItem(DAILY_STORAGE_KEYS.dailyScore, "0");
         localStorage.setItem(DAILY_STORAGE_KEYS.dailyScoreDate, today);
     }
-
+    recordLoginDay();
+    renderWeekTracker();
     refreshGlobalTopbar();
 }
 
@@ -162,14 +208,16 @@ const $ = (id) => document.getElementById(id);
 // Chargement des données
 // ============================================================
 async function loadData() {
-    const [quiz, citations, persons] = await Promise.all([
+    const [quiz, citations, persons, dailyQuiz] = await Promise.all([
         fetch("data/quiz.json").then(r => r.json()),
         fetch("data/citations.json").then(r => r.json()),
-        fetch("data/persons.json").then(r => r.json())
+        fetch("data/persons.json").then(r => r.json()),
+        fetch("data/daily_quiz.json").then(r => r.json())
     ]);
     QUESTIONS_QUIZ = quiz;
     QUESTIONS_CITATIONS = citations;
     QUESTIONS_PERSONS = persons;
+    QUESTIONS_DAILY_QUIZ = dailyQuiz;
     buildPersonsIndex();
 }
 
@@ -352,8 +400,9 @@ function buildGauge() {
 }
 
 function updateGauge() {
-    for (let i = 0; i < ROUND_LENGTH; i++) {
+    for (let i = 0; i < roundQuestions.length; i++) {
         const seg = $("seg-" + i);
+        if (!seg) continue;
         seg.classList.remove("current", "done-ok", "done-ko");
         if (i < results.length) {
             seg.classList.add(results[i] === "ok" ? "done-ok" : "done-ko");
@@ -383,15 +432,23 @@ function startGame(mode, niveau) {
 
     if (currentMode === "mixed") {
         roundQuestions = buildMixedRound();
+
     } else if (currentMode === "quiestce") {
         roundQuestions = buildQuiestceRound(currentNiveau);
+
+    } else if (currentMode === "dailyquiz") {
+        roundQuestions = QUESTIONS_DAILY_QUIZ.map(q => ({
+            ...q,
+            shuffled: shuffle(q.propositions)
+        }));
+
     } else {
-        roundQuestions = shuffle(poolFor(currentMode)).slice(0, ROUND_LENGTH).map(q => {
-            return {
+        roundQuestions = shuffle(poolFor(currentMode))
+            .slice(0, ROUND_LENGTH)
+            .map(q => ({
                 ...q,
                 shuffled: shuffle(q.propositions)
-            };
-        });
+            }));
     }
 
     currentIndex = 0;
@@ -634,9 +691,7 @@ function goHome() {
     $("screenEnd").classList.add("hidden");
     $("screenLevel").classList.add("hidden");
     $("screenIntro").classList.remove("hidden");
-    $("introBestQuiz").textContent = getBest("quiz");
-    $("introBestCitations").textContent = getBest("citations");
-    $("introBestquiestce").textContent = getBestQuiestce();
+    renderWeekTracker();
     if ($("introBestMixed")) $("introBestMixed").textContent = getBest("mixed");
     if ($("mixedPageBest")) $("mixedPageBest").textContent = getBest("mixed");
 }
@@ -661,7 +716,7 @@ function initUI() {
     $("btnStartQuiz").addEventListener("click", () => startGame("quiz"));
     $("btnStartCitations").addEventListener("click", () => startGame("citations"));
     if ($("btnStartMixed")) $("btnStartMixed").addEventListener("click", () => startGame("mixed"));
-    if ($("btnStartMixedPage")) $("btnStartMixedPage").addEventListener("click", () => startGame("mixed"));
+    if ($("btnStartDailyQuiz")) $("btnStartDailyQuiz").addEventListener("click", () => startGame("dailyquiz"));
     $("btnGoLevel").addEventListener("click", goLevelScreen);
 
     // Abandon de partie (croix)
@@ -682,10 +737,43 @@ function initUI() {
     $("btnLevelPresidentielle").addEventListener("click", () => startGame("quiestce", "presidentielle"));
     $("btnReplay").addEventListener("click", () => startGame());
     $("btnHome").addEventListener("click", goHome);
-    $("introBestQuiz").textContent = getBest("quiz");
-    $("introBestCitations").textContent = getBest("citations");
-    $("introBestquiestce").textContent = getBestQuiestce();
     initCampaignsCarousel();
+
+
+    // Barre flottante : réduction au défilement
+    const bottomNav = document.getElementById("bottomNav");
+
+    if (bottomNav) {
+        const THRESHOLD = 10;
+        let lastScrollY = window.scrollY;
+        let idleTimer;
+
+        const expandNav = () => {
+            bottomNav.classList.remove("is-compact");
+        };
+
+        window.addEventListener("scroll", () => {
+            const currentY = window.scrollY;
+
+            if (currentY > lastScrollY + THRESHOLD && currentY > 40) {
+                bottomNav.classList.add("is-compact");
+            } else if (currentY < lastScrollY - THRESHOLD) {
+                expandNav();
+            }
+
+            lastScrollY = currentY;
+
+            clearTimeout(idleTimer);
+            idleTimer = setTimeout(expandNav, 600);
+        }, { passive: true });
+
+        bottomNav.addEventListener("pointerenter", expandNav);
+        bottomNav.addEventListener("focusin", expandNav);
+
+        // Sur écran tactile, développer la barre dès qu'on la touche.
+        bottomNav.addEventListener("pointerdown", expandNav);
+    }
+
 }
 
 // ============================================================
@@ -694,13 +782,9 @@ function initUI() {
 function initCampaignsCarousel() {
     const track = $("campaignsTrack");
     const titleEl = $("campaignsTitle");
-    const dotsEl = $("campaignsDots");
     if (!track) return;
 
     const slides = [...track.querySelectorAll(".campaign")];
-
-    slides.forEach(() => dotsEl.appendChild(document.createElement("span")));
-    const dots = [...dotsEl.children];
 
     let ticking = false;
 
@@ -725,7 +809,6 @@ function initCampaignsCarousel() {
         });
 
         titleEl.textContent = slides[closest].dataset.title || "";
-        dots.forEach((dot, i) => dot.classList.toggle("active", i === closest));
     }
 
     track.addEventListener("scroll", () => {
