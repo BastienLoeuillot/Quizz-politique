@@ -1,0 +1,67 @@
+[
+  {
+    "id": "daily_1",
+    "surtitre": "Attention réaction",
+    "question": "Quelle annonce Sébastien Lecornu a fait après la manifestation du 17 octobre ?",
+    "propositions": [
+      "Il va recevoir les partis politiques, les syndicats et les organisations étudiantes",
+      "Il démissionne",
+      "Il a demandé à Emmanuel Macron de prendre des mesures concrètes pour les étudiants",
+      "Il a fuit à Varenne"
+    ],
+    "reponse": "Il va recevoir les partis politiques, les syndicats et les organisations étudiantes",
+    "contexte": "Il aurait peut-être pu y penser avant, non ?"
+  },
+  {
+    "id": "daily_2",
+    "surtitre": "Qui est surpris ?",
+    "question": "Qui a parlé du 'véritable visage du grand remplacement' et de 'horde de barbares maghrébiens et africains' à propos des violences en marge des manifestations ?",
+    "propositions": [
+      "Eric Zemmour",
+      "Marine Le Pen",
+      "Raphaël Glucksmann",
+      "Edouard Philippe"
+    ],
+    "reponse": "Eric Zemmour",
+    "contexte": "Allô l'Arcom ?"
+  },
+  {
+    "id": "daily_3",
+    "surtitre": "On s'en serait passé",
+    "question": "Qu'a annoncé Emmanuel Macron dans son allocution ?",
+    "propositions": [
+      "Que les préfets pourront interdire certains rassemblements à l'avenir",
+      "Qu'il dissoudrait l'Assemblée nationale si d'autres manifestations ont lieu",
+      "Qu'il comptait supprimer Parcoursup",
+      "qu'il a aussi participé aux manifestations parce que 'l'inflation, ce n'est plus possible'"
+    ],
+    "reponse": "Que les préfets pourront interdire certains rassemblements à l'avenir",
+    "contexte": "Un amoureux des mouvements sociaux"
+  },
+  {
+    "id": "daily_4",
+    "surtitre": "Baston",
+    "question": "Qui a confronté le président du RN Jordan Bardella devant un commissariat ?",
+    "propositions": [
+      "L'écologiste Pouria Amirshahi qui l'a accusé 'd'attiser une France contre l'autre'",
+      "L'insoumis Gabriel Amard qui lui a demander de 'rembourser l'argent que le RN a volé'",
+      "Le communiste Fabien Roussel qui l'a traité de 'petit facho de pacotille'",
+      "Marine Le Pen, qui lui a expliqué comment porter des costumes à sa taille"
+    ],
+    "reponse": "L'écologiste Pouria Amirshahi qui l'a accusé 'd'attiser une France contre l'autre'",
+    "contexte": "C'est pourtant pas son style"
+  },
+  {
+    "id": "daily_5",
+    "surtitre": "1,2,3,...",
+    "question": "Combien de personnes sont venus manifester en France le 17 octobre ?",
+    "propositions": [
+      "Entre 20 000 et 30 000",
+      "Entre 100 000 et 150 000",
+      "Entre 550 000 et 800 000",
+      "Plus d'un million"
+    ],
+    "reponse": "Entre 550 000 et 800 000",
+    "contexte": "Bon après je ne les ai pas toutes compter hein"
+  }
+  ]
