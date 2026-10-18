@@ -30,8 +30,21 @@
         <div id="screenIntro" class="screen intro">
             <button class="btn" id="btnStartMixedPage">Quiz rapide</button>
             <div style="height: 10px;"></div>
-            <div class="bestscore" style="margin-top:20px;">
-                Meilleur score : <span id="mixedPageBest">0</span> pts
+            <div class="campaigns">
+                <div class="campaigns-track" id="campaignsTrack">
+                    <button type="button" class="campaign" data-campaign="1" data-title="Trahsion"
+                        style="--img: url('images/trahison.jpg')" aria-label="Trahison"></button>
+                    <button type="button" class="campaign" data-campaign="2" data-title="À table !"
+                        style="--img: url('images/atable.jpg')" aria-label="À table !"></button>
+                    <button type="button" class="campaign" data-campaign="3" data-title="Culture pop"
+                        style="--img: url('images/culturepop.jpg')" aria-label="Culture pop"></button>
+                    <button type="button" class="campaign" data-campaign="4" data-title="Icon"
+                        style="--img: url('images/icon.jpg')" aria-label="Icon"></button>
+                    <button type="button" class="campaign" data-campaign="5" data-title="2027"
+                        style="--img: url('images/2027.jpg')" aria-label="2027"></button>
+                </div>
+                <div class="campaigns-title" id="campaignsTitle"></div>
+                <div class="campaigns-dots" id="campaignsDots"></div>
             </div>
         </div>
 
@@ -166,6 +179,26 @@
                                 <div id="powerupGauge" class="powerup-gauge-fill"></div>
                             </div>
                             <div class="percentage" id="playerPercentage">—</div>
+                        </div>
+                    </div>
+                    <div id="questionOverlay" class="question-overlay hidden" aria-live="polite">
+                        <div class="question-card" id="questionCard">
+                            <div class="tag">Vrai ou faux ?</div>
+                            <div class="question-text" id="questionText"></div>
+
+                            <div class="question-timer">
+                                <div class="question-timer-fill" id="questionTimerFill"></div>
+                            </div>
+
+                            <div class="question-buttons" id="questionButtons">
+                                <button class="btn" id="btnTrue">VRAI</button>
+                                <button class="btn" id="btnFalse">FAUX</button>
+                            </div>
+
+                            <div class="question-result hidden" id="questionResult">
+                                <div class="question-verdict" id="questionVerdict"></div>
+                                <div class="question-explication" id="questionExplication"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
