@@ -107,6 +107,7 @@ const TimerManager = {
 class GameState {
   constructor() {
     this.running = false;
+    this.paused = false; 
     this.countdownActive = false;
     this.countdownValue = 0;
     this.powerupTimeLeft = 20;
@@ -128,6 +129,7 @@ class GameState {
       playerShotBoost: 1,
       opponentShotBoost: 1
     };
+    this.effectTimers = [];         // <-- ajouté : effets en cours { powerUp, remaining }
   }
 
   resetEffects() {
@@ -137,6 +139,7 @@ class GameState {
       playerShotBoost: 1,
       opponentShotBoost: 1
     };
+    this.effectTimers = [];
   }
 }
 
@@ -152,24 +155,26 @@ const App = (function() {
   ];
 
   const DEFAULT_CANDIDATES = [
-    { name: "Raphaël Glucksmann", camp: "ps", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfF-qAE917M_HjvNF5MmJ5iJTrYbHmzO2hRmfSKbVJg2ZDTLKCEyukNrk&s=10" },
-    { name: "Olivier Faure", camp: "ps", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQO1wGsMu95qbAxu0q-SGB3zcvfOWAzdJuGnaeSrrZ_rmZPAlFkrHV-LaJ9&s=10" },
-    { name: "Ségolène Royal", camp: "ps", image: "https://photos.tf1.fr/1280/720/en-toute-franchise-segolene-royal-096359-0@3x.webp" },
-    { name: "Jean-Luc Mélenchon", camp: "gauche", image: "https://images.rtl.fr/~c/2000v2000/rtl/www/1836240-jean-luc-melenchon-avant-le-20h-de-tf1-ou-il-a-annonce-sa-candidature-a-l-election-presidentielle-francaise-de-2027-le-3-mai-2026.jpg" },
-    { name: "François Hollande", camp: "gauche", image: "https://s.yimg.com/lo/mysterio/api/887d3a6fca7a54a7c53e340cea065a18b126b7dc7aa0cb95f1f54a2b49baa973/lightyear_networkapi/resizefit_w960%3Bquality_80%3Bformat_webp/https%3A%2F%2Fmedia.zenfs.com%2Ffr%2Fcapital_268%2Fdc5d595bb483a12e9057b90045032874.jpg" },
-    { name: "Marine Tondelier", camp: "gauche", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ25o3Mj4aW9_KYxWjNvgsPiEWFgpJ-P3gJHbE3RZul-0kVQo1MmIL_qUs&s=10" },
-    { name: "Fabien Roussel", camp: "gauche", image: "https://io-fsly-bfmtv.cdn.nextradiotv.com/2eCVfJZTD0gEi7lgEwpFoYAh5wc=/420x0:1500x1080/1920x0/images/Fabien-Roussel-secretaire-national-du-PCF-invite-de-BFMTV-RMC-le-16-septembre-2026-2348831.jpg" },
-    { name: "Édouard Philippe", camp: "macron", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ79nAgMWuM7WvULv1LjHvk3zdcRbB5bMP6tM8apLAhmXYeKTpDGYRc-8Q&s=10" },
-    { name: "Gabriel Attal", camp: "macron", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQm5LheOs4GmJQQxB9NuF0HbMol4YOjiVIg4yy4g7x21TWVDJIXlSFVfMZe&s=10" },
-    { name: "Bruno Retailleau", camp: "macron", image: "https://images.rtl.fr/~c/770v513/rtl/www/1743632-bruno-retailleau-a-epinal-le-samedi-22-mars-2025.jpg" },
-    { name: "Marine Le Pen", camp: "rn", image: "https://lcp.fr/sites/lcp.fr/files/styles/entete_contenu_1030x570/public/2025-03/Le%20Pen%20TF1.webp?h=33f7e92d&itok=-RfDvkch%201x" },
-    { name: "Jordan Bardella", camp: "rn", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlfPuD9_jg89LNzwMKC-DyAkdS_7Rxigoy0CaB1rD0-ZRsdkYnZR-J1bq_&s=10" },
-    { name: "Éric Zemmour", camp: "rn", image: "https://media1.ledevoir.com/images_galerie/originale_1056087_860745/image.jpg?crop=3%3A2%2Csmart&width=1440" }
+    { slug: "glucksmann",name: "Raphaël Glucksmann", camp: "ps", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfF-qAE917M_HjvNF5MmJ5iJTrYbHmzO2hRmfSKbVJg2ZDTLKCEyukNrk&s=10" },
+    { slug: "faure", name: "Olivier Faure", camp: "ps", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQO1wGsMu95qbAxu0q-SGB3zcvfOWAzdJuGnaeSrrZ_rmZPAlFkrHV-LaJ9&s=10" },
+    { slug: "royal", name: "Ségolène Royal", camp: "ps", image: "https://photos.tf1.fr/1280/720/en-toute-franchise-segolene-royal-096359-0@3x.webp" },
+    { slug: "melenchon", name: "Jean-Luc Mélenchon", camp: "gauche", image: "https://images.rtl.fr/~c/2000v2000/rtl/www/1836240-jean-luc-melenchon-avant-le-20h-de-tf1-ou-il-a-annonce-sa-candidature-a-l-election-presidentielle-francaise-de-2027-le-3-mai-2026.jpg" },
+    { slug: "hollande", name: "François Hollande", camp: "gauche", image: "https://s.yimg.com/lo/mysterio/api/887d3a6fca7a54a7c53e340cea065a18b126b7dc7aa0cb95f1f54a2b49baa973/lightyear_networkapi/resizefit_w960%3Bquality_80%3Bformat_webp/https%3A%2F%2Fmedia.zenfs.com%2Ffr%2Fcapital_268%2Fdc5d595bb483a12e9057b90045032874.jpg" },
+    { slug: "tondelier", name: "Marine Tondelier", camp: "gauche", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ25o3Mj4aW9_KYxWjNvgsPiEWFgpJ-P3gJHbE3RZul-0kVQo1MmIL_qUs&s=10" },
+    { slug: "roussel", name: "Fabien Roussel", camp: "gauche", image: "https://io-fsly-bfmtv.cdn.nextradiotv.com/2eCVfJZTD0gEi7lgEwpFoYAh5wc=/420x0:1500x1080/1920x0/images/Fabien-Roussel-secretaire-national-du-PCF-invite-de-BFMTV-RMC-le-16-septembre-2026-2348831.jpg" },
+    { slug: "philippe", name: "Édouard Philippe", camp: "macron", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ79nAgMWuM7WvULv1LjHvk3zdcRbB5bMP6tM8apLAhmXYeKTpDGYRc-8Q&s=10" },
+    { slug: "attal", name: "Gabriel Attal", camp: "macron", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQm5LheOs4GmJQQxB9NuF0HbMol4YOjiVIg4yy4g7x21TWVDJIXlSFVfMZe&s=10" },
+    { slug: "retailleau", name: "Bruno Retailleau", camp: "macron", image: "https://images.rtl.fr/~c/770v513/rtl/www/1743632-bruno-retailleau-a-epinal-le-samedi-22-mars-2025.jpg" },
+    { slug: "lepen", name: "Marine Le Pen", camp: "rn", image: "https://lcp.fr/sites/lcp.fr/files/styles/entete_contenu_1030x570/public/2025-03/Le%20Pen%20TF1.webp?h=33f7e92d&itok=-RfDvkch%201x" },
+    { slug: "bardella", name: "Jordan Bardella", camp: "rn", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlfPuD9_jg89LNzwMKC-DyAkdS_7Rxigoy0CaB1rD0-ZRsdkYnZR-J1bq_&s=10" },
+    { slug: "zemmour", name: "Éric Zemmour", camp: "rn", image: "https://media1.ledevoir.com/images_galerie/originale_1056087_860745/image.jpg?crop=3%3A2%2Csmart&width=1440" }
   ].map((c, i) => ({ id: "default-" + i, ...c }));
 
   const CAMP_COLORS = { ps: "#E4356B", gauche: "#D8232A", macron: "#F2C230", rn: "#1B3A6B" };
   const PADDLE_CONFIG = { width: 70, height: 14, border: 1.5 };
   const WINNING_SCORE = 5;
+  const QUESTION_TIME = 8;            // secondes pour répondre
+  const EXPLANATION_TIME = 4000;      // ms d'affichage de l'explication avant la reprise
   const FONT_DISPLAY = "'Sora', sans-serif";
 
   const MESSAGES = [
@@ -235,6 +240,43 @@ const App = (function() {
     hard: { speed: 5.6, reaction: 0.98 }
   };
 
+  let questionsBySlug = {};   // { slug: [questions] }
+  let questionStock = {};     // { slug: [questions pas encore posées] }
+
+  async function loadPongQuestions() {
+    try {
+      const res = await fetch("data/pong_questions.json");
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const list = await res.json();
+      questionsBySlug = {};
+      for (const q of list) {
+        if (!questionsBySlug[q.candidat]) questionsBySlug[q.candidat] = [];
+        questionsBySlug[q.candidat].push(q);
+      }
+    } catch (err) {
+      console.warn("Questions Pol-pong indisponibles, mode aléatoire conservé :", err);
+      questionsBySlug = {};
+    }
+  }
+
+  function shuffleArray(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function drawQuestion(slug) {
+    const all = questionsBySlug[slug];
+    if (!all || !all.length) return null;          // pas de question : l'appelant utilisera le repli
+    if (!questionStock[slug] || !questionStock[slug].length) {
+      questionStock[slug] = shuffleArray(all);     // stock épuisé : on remélange tout
+    }
+    return questionStock[slug].pop();
+  }
+
   let state = new GameState();
   let canvas, ctx;
   let animationId = null;
@@ -250,6 +292,8 @@ const App = (function() {
   function init() {
     canvas = document.getElementById("gameCanvas");
     ctx = canvas.getContext("2d");
+    loadPongQuestions();
+    setupQuestionUI();
 
     // Préchargement des images d'avatars
     DEFAULT_CANDIDATES.forEach(c => ImageCache.get(c.image));
@@ -301,7 +345,9 @@ const App = (function() {
   }
 
   function showSelection() {
+    document.body.classList.remove("game-in-progress");
     stopGame();
+    questionStock = {};
     state.campaign = null;
     hideAllScreens();
     document.getElementById("selectionScreen").classList.remove("hidden");
@@ -313,6 +359,7 @@ const App = (function() {
 
     populateCandidateSelect();
     setMode(state.mode);
+    setDifficulty(state.difficulty);
   }
 
   function populateCampSelect() {
@@ -430,6 +477,7 @@ const App = (function() {
   }
 
   function beginMatch(playerCandidate, opponentCandidate, matchMode) {
+    document.body.classList.add("game-in-progress");
     state.currentMatchMode = matchMode;
     state.playerCandidate = playerCandidate;
     state.opponentCandidate = opponentCandidate;
@@ -470,7 +518,12 @@ const App = (function() {
 
       state.powerupTimeLeft -= 0.1;
       if (state.powerupTimeLeft <= 0) {
-        triggerRandomPowerUp();
+        if (state.pointPending) {
+          state.powerupTimeLeft = 0;
+          updateGaugeUI();
+          return;
+        }
+        if (!askQuestion()) triggerRandomPowerUp();   // repli si pas de question disponible
         state.powerupTimeLeft = 20;
       }
       updateGaugeUI();
@@ -485,18 +538,30 @@ const App = (function() {
     }
   }
 
-  function triggerRandomPowerUp() {
-    if (!state.running) return;
-    const powerUp = POWER_UPS[Math.floor(Math.random() * POWER_UPS.length)];
+  function applyPowerUp(powerUp, showMessage = true) {
     const color = CAMP_COLORS[state.playerCandidate.camp] || "#111";
 
     SoundEngine.playPowerup();
-    showStructuredMessage(powerUp, color);
+    if (showMessage) showStructuredMessage(powerUp, color);
 
     powerUp.apply(state);
-    TimerManager.setTimeout(() => {
-      powerUp.reset(state);
-    }, powerUp.duration);
+    state.effectTimers.push({ powerUp, remaining: powerUp.duration / 1000 });
+  }
+
+  function triggerRandomPowerUp() {
+    if (!state.running) return;
+    applyPowerUp(POWER_UPS[Math.floor(Math.random() * POWER_UPS.length)]);
+  }
+
+  function tickEffects(dt) {
+    for (let i = state.effectTimers.length - 1; i >= 0; i--) {
+      const e = state.effectTimers[i];
+      e.remaining -= dt;
+      if (e.remaining <= 0) {
+        e.powerUp.reset(state);
+        state.effectTimers.splice(i, 1);
+      }
+    }
   }
 
   function showStructuredMessage(powerUp, color) {
@@ -575,6 +640,7 @@ const App = (function() {
   }
 
   function update(dt) {
+    tickEffects(dt);  
     playerPaddle.width = PADDLE_CONFIG.width * state.activeEffects.paddleMultiplier;
 
     updateAI(dt);
@@ -637,7 +703,7 @@ const App = (function() {
     const paddleCenter = paddle.x + paddle.width / 2;
     const impact = (ball.x - paddleCenter) / (paddle.width / 2);
     ball.vx = impact * 300 * boost;
-    hitPaddle : ball.vy *= 1.035;
+    ball.vy *= 1.035;
 
     const currentSpeed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
     if (currentSpeed > 700) {
@@ -988,11 +1054,107 @@ const App = (function() {
     }
   }
 
+  function pauseForQuestion() {
+    if (!state.running || state.pointPending) return false;   // refuse si le jeu n'est pas en cours
+    state.running = false;
+    state.paused = true;
+    if (animationId) cancelAnimationFrame(animationId);
+    return true;
+  }
+
+  function resumeAfterQuestion() {
+    if (!state.paused) return;
+    state.paused = false;
+    startCountdown(3, () => {              // 3, 2, 1 avant de relancer
+      state.running = true;
+      lastTime = performance.now();        // évite un énorme dt au premier tour
+     animationId = requestAnimationFrame(gameLoop);
+    });
+  }
+
+  let questionTimerId = null;
+  let questionTimeLeft = 0;
+
+  function setupQuestionUI() {
+    document.getElementById("btnTrue").onclick = () => answerQuestion(true);
+    document.getElementById("btnFalse").onclick = () => answerQuestion(false);
+  }
+
+  function askQuestion() {
+    const slug = state.playerCandidate && state.playerCandidate.slug;
+    if (!slug || !questionsBySlug[slug] || !questionsBySlug[slug].length) return false;  // pas de questions : repli
+    if (!pauseForQuestion()) return false;
+
+    const q = drawQuestion(slug);
+    state.currentQuestion = q;
+    state.questionAnswered = false;
+
+    const card = document.getElementById("questionCard");
+    card.classList.remove("correct", "wrong");
+    document.getElementById("questionText").textContent = q.affirmation;
+    document.getElementById("questionButtons").classList.remove("hidden");
+    document.getElementById("questionResult").classList.add("hidden");
+    document.getElementById("questionOverlay").classList.remove("hidden");
+
+    questionTimeLeft = QUESTION_TIME;
+    const fill = document.getElementById("questionTimerFill");
+    fill.style.width = "100%";
+
+    questionTimerId = TimerManager.setInterval(() => {
+      questionTimeLeft -= 0.05;
+      fill.style.width = Math.max(0, questionTimeLeft / QUESTION_TIME * 100) + "%";
+      if (questionTimeLeft <= 0) answerQuestion(null);      // temps écoulé = échec
+    }, 50);
+
+    return true;
+  }
+
+  function answerQuestion(choice) {
+    if (!state.currentQuestion || state.questionAnswered) return;
+    state.questionAnswered = true;
+    clearInterval(questionTimerId);
+
+    const q = state.currentQuestion;
+    const timedOut = choice === null;
+    const correct = !timedOut && choice === q.reponse;
+
+    // Bonus si juste, malus sinon
+    const pool = POWER_UPS.filter(p => p.type === (correct ? "bonus" : "malus"));
+    const powerUp = pool[Math.floor(Math.random() * pool.length)];
+    applyPowerUp(powerUp, false);
+
+    // Affichage du résultat
+    const card = document.getElementById("questionCard");
+    card.classList.add(correct ? "correct" : "wrong");
+    document.getElementById("questionVerdict").textContent = correct ? "Exact !" : (timedOut ? "Temps écoulé" : "Raté");
+
+    const expl = document.getElementById("questionExplication");
+    expl.textContent = q.explication;
+    const rule = document.createElement("div");
+    rule.className = "question-rule";
+    rule.textContent = (powerUp.type === "bonus" ? "BONUS : " : "MALUS : ") + powerUp.rule;
+    expl.appendChild(rule);
+
+    document.getElementById("questionButtons").classList.add("hidden");
+    document.getElementById("questionResult").classList.remove("hidden");
+
+    // Après l'explication : on referme et on reprend
+    TimerManager.setTimeout(() => {
+      document.getElementById("questionOverlay").classList.add("hidden");
+      state.currentQuestion = null;
+      resumeAfterQuestion();
+    }, EXPLANATION_TIME);
+  }
+
+
   function stopGame() {
     state.running = false;
+    state.paused = false;
     state.countdownActive = false;
+    state.currentQuestion = null;
     TimerManager.clearAll();
     if (animationId) cancelAnimationFrame(animationId);
+    document.getElementById("questionOverlay")?.classList.add("hidden");
   }
 
   function quitGame() {
@@ -1027,7 +1189,12 @@ const App = (function() {
 
   return {
     init, setCamp, setMode, setDifficulty, updateCandidatePreview,
-    startGame, quitGame, showSelection, continueCampaignTransition, exit
+    startGame, quitGame, showSelection, continueCampaignTransition, exit,
+    drawQuestion,
+    debugPause: pauseForQuestion,
+    debugResume: resumeAfterQuestion,
+    debugAsk: askQuestion,
+    debugPowerUp: () => applyPowerUp(POWER_UPS[0])
   };
 })();
 
