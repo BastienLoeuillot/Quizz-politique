@@ -209,10 +209,10 @@ const $ = (id) => document.getElementById(id);
 // ============================================================
 async function loadData() {
     const [quiz, citations, persons, dailyQuiz] = await Promise.all([
-        fetch("data/quiz.json").then(r => r.json()),
-        fetch("data/citations.json").then(r => r.json()),
-        fetch("data/persons.json").then(r => r.json()),
-        fetch("data/daily_quiz.json").then(r => r.json())
+        fetch("/data/quiz.json").then(r => r.json()),
+        fetch("/data/citations.json").then(r => r.json()),
+        fetch("/data/persons.json").then(r => r.json()),
+        fetch("/data/daily_quiz.json").then(r => r.json())
     ]);
     QUESTIONS_QUIZ = quiz;
     QUESTIONS_CITATIONS = citations;
