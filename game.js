@@ -233,6 +233,12 @@ function verdictFor(s) {
     return "Tu fais quelque chose en 2027 ? On va peut-être avoir besoin de toi.";
 }
 
+function setActiveNav(targetId) {
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.target === targetId);
+    });
+}
+
 // ============================================================
 // Navigation / Gestion des pages
 // ============================================================
@@ -371,6 +377,7 @@ function updateStreakDisplay() {
 }
 
 function startGame(mode, niveau) {
+    document.body.classList.add("game-in-progress");
     if (mode) currentMode = mode;
     if (niveau) currentNiveau = niveau;
 
@@ -400,6 +407,7 @@ function startGame(mode, niveau) {
     const pages = document.querySelectorAll('.page');
     pages.forEach(p => p.classList.add('hidden'));
     $("page-accueil").classList.remove('hidden');
+    setActiveNav("page-accueil"); 
     
     $("screenIntro").classList.add("hidden");
     $("screenLevel").classList.add("hidden");
@@ -607,6 +615,7 @@ function submitAnswer(correct, btnEl) {
 }
 
 function endGame() {
+    document.body.classList.remove("game-in-progress");
     $("screenGame").classList.add("hidden");
     const key = storageKey();
     const best = Math.max(getBest(key), score);
@@ -618,6 +627,7 @@ function endGame() {
 }
 
 function goHome() {
+    document.body.classList.remove("game-in-progress");
     cancelAnimationFrame(timerRAF);
     clearTimeout(nextTimeout); 
     $("screenGame").classList.add("hidden");
@@ -632,17 +642,18 @@ function goHome() {
 }
 
 function goLevelScreen() {
+    document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+    $("page-accueil").classList.remove("hidden");
+    setActiveNav("page-accueil"); 
     $("screenIntro").classList.add("hidden");
     $("screenLevel").classList.remove("hidden");
 }
 
 function initUI() {
-    const navButtons = document.querySelectorAll('.nav-btn');
-    navButtons.forEach(button => {
+    document.querySelectorAll('.nav-btn').forEach(button => {
         button.addEventListener('click', () => {
-            navButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
             const targetId = button.getAttribute('data-target');
+            setActiveNav(targetId);
             changerPage(targetId);
         });
     });
@@ -657,8 +668,7 @@ function initUI() {
     $("btnQuitGame").addEventListener("click", goHome);
 
     document.addEventListener("pong:exit", () => {
-        document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-        document.querySelector('.nav-btn[data-target="page-accueil"]').classList.add('active');
+        setActiveNav('page-accueil');
         changerPage('page-accueil');
     });
 
@@ -675,6 +685,127 @@ function initUI() {
     $("introBestQuiz").textContent = getBest("quiz");
     $("introBestCitations").textContent = getBest("citations");
     $("introBestquiestce").textContent = getBestQuiestce();
+    initCampaignsCarousel();
+}
+
+// ============================================================
+// Carrousel de campagnes (page d'accueil)
+// ============================================================
+function initCampaignsCarousel() {
+    const track = $("campaignsTrack");
+    const titleEl = $("campaignsTitle");
+    const dotsEl = $("campaignsDots");
+    if (!track) return;
+
+    const slides = [...track.querySelectorAll(".campaign")];
+
+    slides.forEach(() => dotsEl.appendChild(document.createElement("span")));
+    const dots = [...dotsEl.children];
+
+    let ticking = false;
+
+    function update() {
+        ticking = false;
+        const trackRect = track.getBoundingClientRect();
+        const centerX = trackRect.left + trackRect.width / 2;
+        let closest = 0;
+        let closestDist = Infinity;
+
+        slides.forEach((slide, i) => {
+            const r = slide.getBoundingClientRect();
+            if (!r.width) return;
+            const dist = Math.abs(r.left + r.width / 2 - centerX);
+            const d = Math.min(dist / r.width, 1);       // 0 = centré, 1 = voisin direct ou plus loin
+
+            slide.style.transform = `scale(${1 - d * 0.35})`;
+            slide.style.filter = `blur(${d * 4}px)`;
+            slide.style.opacity = String(1 - d * 0.5);
+
+            if (dist < closestDist) { closestDist = dist; closest = i; }
+        });
+
+        titleEl.textContent = slides[closest].dataset.title || "";
+        dots.forEach((dot, i) => dot.classList.toggle("active", i === closest));
+    }
+
+    track.addEventListener("scroll", () => {
+        if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+
+    // ---- Glisser à la souris (ordinateur) ----
+    let dragging = false;
+    let dragMoved = false;
+    let startX = 0;
+    let startScroll = 0;
+
+    track.addEventListener("pointerdown", (e) => {
+        if (e.pointerType !== "mouse" || e.button !== 0) return;   // tactile : défilement natif
+        dragging = true;
+        dragMoved = false;
+        startX = e.clientX;
+        startScroll = track.scrollLeft;
+    });
+
+    track.addEventListener("pointermove", (e) => {
+        if (!dragging) return;
+        const dx = e.clientX - startX;
+        if (!dragMoved && Math.abs(dx) > 5) {
+            dragMoved = true;                       // on est vraiment en train de glisser
+            track.classList.add("dragging");
+            track.setPointerCapture(e.pointerId);   // continue même si la souris sort du carrousel
+        }
+        if (dragMoved) track.scrollLeft = startScroll - dx;
+    });
+
+    function endDrag() {
+        if (!dragging) return;
+        dragging = false;
+        if (!dragMoved) return;
+
+        track.classList.remove("dragging");
+
+        // recentre sur le bouton le plus proche
+        const trackRect = track.getBoundingClientRect();
+        const centerX = trackRect.left + trackRect.width / 2;
+        let target = slides[0];
+        let best = Infinity;
+        slides.forEach((slide) => {
+            const r = slide.getBoundingClientRect();
+            const dist = Math.abs(r.left + r.width / 2 - centerX);
+            if (dist < best) { best = dist; target = slide; }
+        });
+        const r = target.getBoundingClientRect();
+        track.scrollTo({
+            left: track.scrollLeft + (r.left + r.width / 2 - centerX),
+            behavior: "smooth"
+        });
+    }
+
+    track.addEventListener("pointerup", endDrag);
+    track.addEventListener("pointercancel", endDrag);
+
+    // Un glisser ne doit pas être interprété comme un clic sur un bouton
+    track.addEventListener("click", (e) => {
+        if (dragMoved) {
+            e.preventDefault();
+            e.stopPropagation();
+            dragMoved = false;
+        }
+    }, true);
+
+    window.addEventListener("resize", update);
+
+    // Recalcule dès que le carrousel a une taille réelle (chargement, retour sur la page d'accueil...)
+    let wasVisible = false;
+    new ResizeObserver(() => {
+        const visible = track.clientWidth > 0;
+        if (visible && !wasVisible) track.scrollLeft = 0;   // première campagne au centre
+        wasVisible = visible;
+        if (visible) update();
+    }).observe(track);
+
+    // Sécurité : une fois les polices et images chargées
+    window.addEventListener("load", update);
 }
 
 // ============================================================
