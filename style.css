@@ -3,7 +3,7 @@
     --font-display: 'Sora', sans-serif;
     --font-title: 'Syne', sans-serif;
 
-    --bg: #fff;
+    --bg: #ffffff;
     --card: #ffffff;
     --ink: #111;
     --ink-soft: #777;
@@ -42,7 +42,7 @@ body {
     align-items: flex-start;
     justify-content: center;
     min-height: 100vh;
-    padding: 24px 16px 86px;
+    padding: calc(24px + env(safe-area-inset-top)) 16px 86px;
     line-height: 1.45;
 }
 
@@ -57,15 +57,17 @@ body {
     left: 50%;
     transform: translateX(-50%);
     width: min(92vw, 480px);
-    padding: 12px 16px;
+    padding: calc(12px + env(safe-area-inset-top)) 16px 12px;
     z-index: 1000;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
 }
 
 .topbar-global .lbl {
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: var(--ink-soft);
+    color: var(--ink);
     font-weight: 700;
 }
 
@@ -949,7 +951,7 @@ body {
 
 #pong .quit {
     position: absolute;
-    top: 17px;
+    top: calc(17px + env(safe-area-inset-top));
     right: 17px;
     border: 0;
     background: transparent;
@@ -1013,130 +1015,161 @@ body {
 #pong .result-buttons { margin-top: auto; padding-bottom: 24px;
 }
 
-/* Structure fixe du menu en bas */
+
+/* =========================================================
+   NAVIGATION FLOTTANTE — style capsule inspiré d'iOS 26
+   ========================================================= */
+
 .bottom-nav {
+    --nav-accent: #febf02;
+
     position: fixed;
-    bottom: 12px;
+    z-index: 3000;
     left: 50%;
+    bottom: calc(12px + env(safe-area-inset-bottom));
     transform: translateX(-50%);
-    width: calc(100% - 24px);
-    max-width: 440px;
-    height: 64px;
+
     display: flex;
     align-items: center;
-    justify-content: space-around;
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(0, 0, 0, 0.07);
-    border-radius: 20px;
-    box-shadow:
-        0 8px 30px rgba(0, 0, 0, 0.08);
-    z-index: 3000;
-    padding: 5px;
+    justify-content: center;
+    gap: 6px;
 
-    /* Animation d'apparition */
+    width: max-content;
+    max-width: calc(100vw - 32px);
+    padding: 9px 12px;
+
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 999px;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.9),
+        0 8px 30px rgba(0, 0, 0, 0.12);
+
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    backdrop-filter: blur(24px) saturate(180%);
+
+    transition:
+        padding 0.4s cubic-bezier(.34, 1.2, .5, 1),
+        gap 0.4s ease;
+
     animation: navAppear 0.5s ease-out;
 }
 
-/* Style des boutons */
 .nav-btn {
     position: relative;
-    flex: 1;
-    height: 54px;
+    flex: 0 0 auto;
+
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 3px;
-    background: none;
-    border: none;
-    outline: none;
-    color: #8e8e93;
+    gap: 8px;
+
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 13px;
+
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: #555;
+
     font-family: inherit;
-    font-size: 10px;
-    font-weight: 600;
+    font-size: 12px;
+    font-weight: 700;
 
     cursor: pointer;
-
-    border-radius: 16px;
+    -webkit-tap-highlight-color: transparent;
 
     transition:
+        background 0.25s ease,
         color 0.25s ease,
         transform 0.2s ease;
-
-    -webkit-tap-highlight-color: transparent;
 }
 
 .nav-icon {
-    position: relative;
-    z-index: 2;
+    display: block;
+    flex: 0 0 24px;
+    width: 24px;
+    height: 24px;
+
+    transition: transform 0.3s cubic-bezier(.34, 1.3, .5, 1);
+}
+
+.nav-label {
+    display: inline-block;
+    max-width: 90px;
+    overflow: hidden;
+    white-space: nowrap;
+    opacity: 1;
 
     transition:
-        transform 0.3s cubic-bezier(.34, 1.56, .64, 1),
-        opacity 0.2s ease;
+        max-width 0.4s cubic-bezier(.34, 1.2, .5, 1),
+        opacity 0.25s ease;
 }
 
 .nav-btn.active {
-    color: #111;
+    background: rgba(128, 128, 128, 0.16);
+    color: inherit;
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
 .nav-btn.active .nav-icon {
-    transform: translateY(-2px) scale(1.08);
+    transform: scale(1.04);
 }
 
-.nav-btn.active::before {
-    content: "";
-    position: absolute;
-    left: 50%;
-    top: 18px;
-    width: 36px;
-    height: 36px;
-    transform: translate(-50%, -50%);
-    background: rgba(254, 191, 2, 0.18);
-    border-radius: 50%;
-    z-index: 1;
-    animation: activeBubble 0.3s cubic-bezier(.34, 1.56, .64, 1);
-}
-
-@keyframes activeBubble {
-    from {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.6);
-    }
-
-    to {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-    }
-}
-
-.nav-btn span {
-    transition:
-        transform 0.25s ease,
-        opacity 0.2s ease;
-}
-
-.nav-btn.active span {
-    transform: translateY(1px);
+.nav-btn:hover:not(.active) {
+    background: rgba(0, 0, 0, 0.06);
 }
 
 .nav-btn:active {
-    transform: scale(0.90);
+    transform: scale(0.94);
 }
 
-.nav-btn:active .nav-icon {
-    transform: scale(0.92);
+.nav-btn:focus-visible {
+    outline: 2px solid #111;
+    outline-offset: 3px;
 }
 
-@media (max-width: 480px) {
-    .bottom-nav {
-        bottom: calc(8px + env(safe-area-inset-bottom));
-    }
+/* Mode compact : icônes uniquement */
+.bottom-nav.is-compact {
+    gap: 2px;
+    padding: 7px;
+}
+
+.bottom-nav.is-compact .nav-btn {
+    padding: 0 10px;
+}
+
+.bottom-nav.is-compact .nav-label {
+    max-width: 0;
+    opacity: 0;
+}
+
+@keyframes navAppear {
+    from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
 /* Masquer la navigation pendant une partie */
 body.game-in-progress .bottom-nav {
+    display: none !important;
+}
+
+/* Respecter les préférences de réduction des animations */
+@media (prefers-reduced-motion: reduce) {
+    .bottom-nav,
+    .nav-btn,
+    .nav-icon,
+    .nav-label {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* Pol-pong en cours : la top bar globale laisse la place au jeu */
+body.game-in-progress .topbar-global {
     display: none !important;
 }
 
@@ -1198,26 +1231,6 @@ body.game-in-progress {
     min-height: 24px;
 }
 
-.campaigns-dots {
-    display: flex;
-    justify-content: center;
-    gap: 6px;
-    margin-top: 10px;
-}
-
-.campaigns-dots span {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--line);
-    transition: background 0.2s, transform 0.2s;
-}
-
-.campaigns-dots span.active {
-    background: var(--ink);
-    transform: scale(1.3);
-}
-
 .campaigns-track {
     cursor: grab;
 }
@@ -1234,4 +1247,61 @@ body.game-in-progress {
 .campaign {
     user-select: none;
     -webkit-user-drag: none;
+}
+
+/* ---- Accueil : carrousel de campagnes centré dans l'écran ---- */
+#screenIntro .campaigns {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(calc(100vw - 32px), 448px);
+    margin: 0;                 /* annule le margin: 0 -28px 28px d'origine */
+}
+
+/* Écrans très bas : on revient au flux normal pour éviter
+   que le carrousel ne chevauche le bouton "Quiz rapide" */
+@media (max-height: 560px) {
+    #screenIntro .campaigns {
+        position: static;
+        transform: none;
+        width: auto;
+        margin: 0 -28px 28px;
+    }
+}
+
+/* ---- Accueil : suivi de connexion de la semaine ---- */
+.week-tracker {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.day-dot {
+    width: 35px;
+    height: 50px;
+    border-radius: 10px;
+    border: 1.5px solid var(--line);
+    background: #fff;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 800;
+    transition: background 0.2s, border-color 0.2s;
+    flex-shrink: 0;
+}
+
+.day-dot.done {
+    background: var(--slowcolor);
+    border-color: var(--slowcolor);
+    color: var(--ink);
+}
+
+/* Jour courant : contour noir (même s'il n'est pas encore validé) */
+.day-dot.today {
+    border-color: var(--ink);
 }
